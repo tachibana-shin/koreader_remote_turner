@@ -39,15 +39,19 @@ class LogsPage extends KaeruWidget<LogsPage> {
                       entry.status == 'success' || entry.status == 'sent';
                   return ListTile(
                     dense: true,
-                    leading: (isSuccess ? Icons.check_circle : Icons.error).toIcon(
-                      color: isSuccess ? Colors.green : Colors.red,
-                      size: 18,
-                    ),
+                    leading: (isSuccess ? Icons.check_circle : Icons.error)
+                        .toIcon(
+                          color: isSuccess ? Colors.green : Colors.red,
+                          size: 18,
+                        ),
                     title: entry.event.text.size(13).make(),
                     subtitle: entry.detail?.text.size(11).gray(600).make(),
                     trailing:
                         '${entry.time.hour.toString().padLeft(2, '0')}:${entry.time.minute.toString().padLeft(2, '0')}:${entry.time.second.toString().padLeft(2, '0')}'
-                            .text.size(11).gray(500).make(),
+                            .text
+                            .size(11)
+                            .gray(500)
+                            .make(),
                   );
                 },
               ).expand(),

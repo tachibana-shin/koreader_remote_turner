@@ -94,8 +94,14 @@ class ButtonConfig {
   final bool onlyWhileOpen;
 
   ButtonConfig({
-    this.forwardKeys = const [LogicalKeyboardKey.audioVolumeUp, LogicalKeyboardKey.arrowRight],
-    this.backwardKeys = const [LogicalKeyboardKey.audioVolumeDown, LogicalKeyboardKey.arrowLeft],
+    this.forwardKeys = const [
+      LogicalKeyboardKey.audioVolumeUp,
+      LogicalKeyboardKey.arrowRight,
+    ],
+    this.backwardKeys = const [
+      LogicalKeyboardKey.audioVolumeDown,
+      LogicalKeyboardKey.arrowLeft,
+    ],
     this.sleepKeys = const [LogicalKeyboardKey.audioVolumeMute],
     this.onlyWhileOpen = true,
   });
@@ -116,11 +122,14 @@ class KeyboardListenerService {
     final prefs = await SharedPreferences.getInstance();
     _config = ButtonConfig(
       forwardKeys: _parseKeyList(
-          prefs.getString('key_forward') ?? 'Audio Volume Up,Arrow Right'),
+        prefs.getString('key_forward') ?? 'Audio Volume Up,Arrow Right',
+      ),
       backwardKeys: _parseKeyList(
-          prefs.getString('key_backward') ?? 'Audio Volume Down,Arrow Left'),
+        prefs.getString('key_backward') ?? 'Audio Volume Down,Arrow Left',
+      ),
       sleepKeys: _parseKeyList(
-          prefs.getString('key_sleep') ?? 'Audio Volume Mute'),
+        prefs.getString('key_sleep') ?? 'Audio Volume Mute',
+      ),
       onlyWhileOpen: prefs.getBool('only_while_open') ?? true,
     );
   }
@@ -129,11 +138,17 @@ class KeyboardListenerService {
     _config = config;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
-        'key_forward', config.forwardKeys.map(KnownKeys.nameOf).join(','));
+      'key_forward',
+      config.forwardKeys.map(KnownKeys.nameOf).join(','),
+    );
     await prefs.setString(
-        'key_backward', config.backwardKeys.map(KnownKeys.nameOf).join(','));
+      'key_backward',
+      config.backwardKeys.map(KnownKeys.nameOf).join(','),
+    );
     await prefs.setString(
-        'key_sleep', config.sleepKeys.map(KnownKeys.nameOf).join(','));
+      'key_sleep',
+      config.sleepKeys.map(KnownKeys.nameOf).join(','),
+    );
     await prefs.setBool('only_while_open', config.onlyWhileOpen);
   }
 

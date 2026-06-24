@@ -70,9 +70,21 @@ class SettingsPage extends KaeruWidget<SettingsPage> {
         8.vSpace,
         SegmentedButton<ThemeMode>(
           segments: [
-            ButtonSegment(value: ThemeMode.light, icon: const Icon(Icons.light_mode), label: t.settingsThemeLight.text.make()),
-            ButtonSegment(value: ThemeMode.dark, icon: const Icon(Icons.dark_mode), label: t.settingsThemeDark.text.make()),
-            ButtonSegment(value: ThemeMode.system, icon: const Icon(Icons.brightness_auto), label: t.settingsThemeSystem.text.make()),
+            ButtonSegment(
+              value: ThemeMode.light,
+              icon: const Icon(Icons.light_mode),
+              label: t.settingsThemeLight.text.make(),
+            ),
+            ButtonSegment(
+              value: ThemeMode.dark,
+              icon: const Icon(Icons.dark_mode),
+              label: t.settingsThemeDark.text.make(),
+            ),
+            ButtonSegment(
+              value: ThemeMode.system,
+              icon: const Icon(Icons.brightness_auto),
+              label: t.settingsThemeSystem.text.make(),
+            ),
           ],
           selected: {themeMode.value},
           onSelectionChanged: (v) {
@@ -115,29 +127,44 @@ class SettingsPage extends KaeruWidget<SettingsPage> {
         _KeyRecorder(
           label: t.settingsKeyForward.text.make(),
           keys: forwardKeys.value,
-          onChanged: (keys) { forwardKeys.value = keys; saveKeys(); },
+          onChanged: (keys) {
+            forwardKeys.value = keys;
+            saveKeys();
+          },
         ),
         _KeyRecorder(
           label: t.settingsKeyBackward.text.make(),
           keys: backwardKeys.value,
-          onChanged: (keys) { backwardKeys.value = keys; saveKeys(); },
+          onChanged: (keys) {
+            backwardKeys.value = keys;
+            saveKeys();
+          },
         ),
         _KeyRecorder(
           label: t.settingsKeySleep.text.make(),
           keys: sleepKeys.value,
-          onChanged: (keys) { sleepKeys.value = keys; saveKeys(); },
+          onChanged: (keys) {
+            sleepKeys.value = keys;
+            saveKeys();
+          },
         ),
         16.vSpace,
         SwitchListTile(
           title: t.settingsOnlyWhileOpen.text.make(),
           value: onlyWhileOpen.value,
-          onChanged: (v) { onlyWhileOpen.value = v; saveKeys(); },
+          onChanged: (v) {
+            onlyWhileOpen.value = v;
+            saveKeys();
+          },
         ),
         24.vSpace,
         t.settingsPassword.text.titleMedium.make(),
         8.vSpace,
         ListTile(
-          title: (passwordAuth.hasPassword ? '********' : t.settingsPasswordNone).text.make(),
+          title:
+              (passwordAuth.hasPassword ? '********' : t.settingsPasswordNone)
+                  .text
+                  .make(),
           trailing: TextButton(
             onPressed: () => _showPasswordDialog(t, ctx),
             child: t.settingsPasswordSet.text.make(),
@@ -234,23 +261,24 @@ class _KeyRecorder extends StatelessWidget {
           runSpacing: 4,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            ...keys.map((key) => Chip(
-              label: KnownKeys.nameOf(key).text.size(13).make(),
-              deleteIcon: const Icon(Icons.close, size: 16),
-              onDeleted: () {
-                final updated = List<LogicalKeyboardKey>.from(keys)
-                  ..remove(key);
-                onChanged(updated);
-              },
-            )),
+            ...keys.map(
+              (key) => Chip(
+                label: KnownKeys.nameOf(key).text.size(13).make(),
+                deleteIcon: const Icon(Icons.close, size: 16),
+                onDeleted: () {
+                  final updated = List<LogicalKeyboardKey>.from(keys)
+                    ..remove(key);
+                  onChanged(updated);
+                },
+              ),
+            ),
             ActionChip(
               avatar: const Icon(Icons.add, size: 16),
               label: 'Add'.text.size(13).make(),
               onPressed: () async {
                 final key = await _recordKey(context);
                 if (key != null && !keys.contains(key)) {
-                  final updated = List<LogicalKeyboardKey>.from(keys)
-                    ..add(key);
+                  final updated = List<LogicalKeyboardKey>.from(keys)..add(key);
                   onChanged(updated);
                 }
               },

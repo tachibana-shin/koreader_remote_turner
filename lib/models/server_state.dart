@@ -5,7 +5,9 @@ import '../services/event_logger.dart';
 enum ServerConnectionState { off, waiting, connected }
 
 class ServerState {
-  final Ref<ServerConnectionState> connectionState = Ref(ServerConnectionState.off);
+  final Ref<ServerConnectionState> connectionState = Ref(
+    ServerConnectionState.off,
+  );
   final Ref<String> deviceName = Ref('');
   final Ref<String> serverAddress = Ref('');
   final Ref<String> serverPort = Ref('9090');
@@ -38,19 +40,17 @@ class ServerState {
     }
 
     final history = List<SpeedDataPoint>.from(speedHistory.value);
-    history.add(SpeedDataPoint(
-      time: now,
-      forward: totalForwardEvents.value,
-      backward: totalBackwardEvents.value,
-    ));
+    history.add(
+      SpeedDataPoint(
+        time: now,
+        forward: totalForwardEvents.value,
+        backward: totalBackwardEvents.value,
+      ),
+    );
     if (history.length > 100) history.removeAt(0);
     speedHistory.value = history;
 
-    logger.log(LogEntry(
-      time: now,
-      event: type,
-      status: 'sent',
-    ));
+    logger.log(LogEntry(time: now, event: type, status: 'sent'));
   }
 
   void replayLogs() {
@@ -63,8 +63,9 @@ class ServerState {
       }
     }
     final now = DateTime.now();
-    final firstEntry =
-        logger.entries.value.isNotEmpty ? logger.entries.value.first : null;
+    final firstEntry = logger.entries.value.isNotEmpty
+        ? logger.entries.value.first
+        : null;
     if (firstEntry != null) {
       _startTime = firstEntry.time.millisecondsSinceEpoch;
       final elapsed = (now.millisecondsSinceEpoch - _startTime) / 1000 / 60;

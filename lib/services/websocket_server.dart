@@ -31,12 +31,14 @@ class WebSocketServer {
       _resetIdleTimer();
       await PlatformService.startForegroundService();
     } catch (e) {
-      state.logger.log(LogEntry(
-        time: DateTime.now(),
-        event: 'server_error',
-        status: 'error',
-        detail: e.toString(),
-      ));
+      state.logger.log(
+        LogEntry(
+          time: DateTime.now(),
+          event: 'server_error',
+          status: 'error',
+          detail: e.toString(),
+        ),
+      );
     }
   }
 
@@ -82,36 +84,41 @@ class WebSocketServer {
           final type = msg['type'] as String?;
           if (type == 'auth') {
             challenge = auth.generateChallenge();
-            socket.add(json.encode({
-              'type': 'auth_challenge',
-              'challenge': challenge,
-            }));
+            socket.add(
+              json.encode({'type': 'auth_challenge', 'challenge': challenge}),
+            );
           } else if (type == 'auth_response') {
             final hash = msg['hash'] as String?;
             if (auth.verify(challenge ?? '', hash ?? '')) {
               socket.add(json.encode({'type': 'auth_result', 'success': true}));
               state.deviceName.value =
                   msg['device_name'] as String? ?? 'Unknown';
-              state.logger.log(LogEntry(
-                time: DateTime.now(),
-                event: 'auth',
-                status: 'success',
-                detail: 'Device connected',
-              ));
+              state.logger.log(
+                LogEntry(
+                  time: DateTime.now(),
+                  event: 'auth',
+                  status: 'success',
+                  detail: 'Device connected',
+                ),
+              );
             } else {
-              socket.add(json.encode({'type': 'auth_result', 'success': false}));
+              socket.add(
+                json.encode({'type': 'auth_result', 'success': false}),
+              );
               socket.close();
             }
           } else if (type == 'hello') {
             if (!auth.hasPassword) {
               state.deviceName.value =
                   msg['device_name'] as String? ?? 'Unknown';
-              state.logger.log(LogEntry(
-                time: DateTime.now(),
-                event: 'connected',
-                status: 'success',
-                detail: 'Device connected: ${state.deviceName.value}',
-              ));
+              state.logger.log(
+                LogEntry(
+                  time: DateTime.now(),
+                  event: 'connected',
+                  status: 'success',
+                  detail: 'Device connected: ${state.deviceName.value}',
+                ),
+              );
             }
           }
         } catch (_) {}
@@ -137,12 +144,14 @@ class WebSocketServer {
   }
 
   void _handleError(Object error) {
-    state.logger.log(LogEntry(
-      time: DateTime.now(),
-      event: 'server_error',
-      status: 'error',
-      detail: error.toString(),
-    ));
+    state.logger.log(
+      LogEntry(
+        time: DateTime.now(),
+        event: 'server_error',
+        status: 'error',
+        detail: error.toString(),
+      ),
+    );
   }
 
   void sendAction(String action) {

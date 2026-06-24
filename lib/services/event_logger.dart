@@ -17,18 +17,18 @@ class LogEntry {
   });
 
   Map<String, dynamic> toJson() => {
-        'time': time.toIso8601String(),
-        'event': event,
-        'status': status,
-        'detail': detail,
-      };
+    'time': time.toIso8601String(),
+    'event': event,
+    'status': status,
+    'detail': detail,
+  };
 
   factory LogEntry.fromJson(Map<String, dynamic> json) => LogEntry(
-        time: DateTime.parse(json['time']),
-        event: json['event'],
-        status: json['status'],
-        detail: json['detail'],
-      );
+    time: DateTime.parse(json['time']),
+    event: json['event'],
+    status: json['status'],
+    detail: json['detail'],
+  );
 }
 
 class EventLogger {
@@ -48,8 +48,9 @@ class EventLogger {
     for (final line in lines.reversed.take(_maxEntries)) {
       if (line.trim().isEmpty) continue;
       try {
-        final entry =
-            LogEntry.fromJson(json.decode(line) as Map<String, dynamic>);
+        final entry = LogEntry.fromJson(
+          json.decode(line) as Map<String, dynamic>,
+        );
         final list = List<LogEntry>.from(entries.value);
         list.add(entry);
         entries.value = list;

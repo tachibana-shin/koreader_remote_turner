@@ -8,7 +8,8 @@ class AboutPage extends KaeruWidget<AboutPage> {
   const AboutPage({super.key});
 
   static const _authorUrl = 'https://github.com/tachibana-shin';
-  static const _repoUrl = 'https://github.com/tachibana-shin/koreader_remote_turner';
+  static const _repoUrl =
+      'https://github.com/tachibana-shin/koreader_remote_turner';
   static const _licenseUrl = 'https://www.gnu.org/licenses/agpl-3.0.html';
   static const _donateUrl = 'https://ko-fi.com/tachib_shin';
 
@@ -27,13 +28,33 @@ class AboutPage extends KaeruWidget<AboutPage> {
         t.appDescription.text.bodyLarge.gray(600).make(),
         24.vSpace,
         [
-          _UrlTile(icon: Icons.person, label: t.aboutAuthor, subtitle: 'tachibana-shin', url: _authorUrl),
+          _UrlTile(
+            icon: Icons.person,
+            label: t.aboutAuthor,
+            subtitle: 'tachibana-shin',
+            url: _authorUrl,
+          ),
           const Divider(height: 1),
-          _UrlTile(icon: Icons.code, label: t.aboutRepo, subtitle: _repoUrl, url: _repoUrl),
+          _UrlTile(
+            icon: Icons.code,
+            label: t.aboutRepo,
+            subtitle: _repoUrl,
+            url: _repoUrl,
+          ),
           const Divider(height: 1),
-          _UrlTile(icon: Icons.description, label: t.aboutLicense, subtitle: 'GNU AGPL v3', url: _licenseUrl),
+          _UrlTile(
+            icon: Icons.description,
+            label: t.aboutLicense,
+            subtitle: 'GNU AGPL v3',
+            url: _licenseUrl,
+          ),
           const Divider(height: 1),
-          _UrlTile(icon: Icons.favorite, label: t.aboutDonate, subtitle: 'Ko-fi', url: _donateUrl),
+          _UrlTile(
+            icon: Icons.favorite,
+            label: t.aboutDonate,
+            subtitle: 'Ko-fi',
+            url: _donateUrl,
+          ),
         ].column().card(),
       ].column(crossAxisAlignment: CrossAxisAlignment.start).p(16).scrollable();
     };
@@ -58,9 +79,12 @@ class _UrlTile extends StatelessWidget {
     return ListTile(
       leading: Icon(icon),
       title: label.text.make(),
-      subtitle: subtitle.text.color(Theme.of(context).colorScheme.primary).make(),
+      subtitle: subtitle.text
+          .color(Theme.of(context).colorScheme.primary)
+          .make(),
       trailing: Icons.open_in_new.toIcon(size: 18),
-      onTap: () => launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
+      onTap: () =>
+          launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
     );
   }
 }
