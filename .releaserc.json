@@ -1,0 +1,21 @@
+{
+  "branches": ["main"],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    ["@semantic-release/exec", {
+      "prepareCmd": "bash scripts/update-version.sh ${nextRelease.version}"
+    }],
+    "@semantic-release/git",
+    ["@semantic-release/github", {
+      "assets": [
+        {"path": "build-android/*.apk", "label": "Android APK"},
+        {"path": "build-linux/*.deb", "label": "Linux DEB"},
+        {"path": "build-windows/*.exe", "label": "Windows Installer"},
+        {"path": "build-macos/*.dmg", "label": "macOS DMG"},
+        {"path": "build-koplugin/*.zip", "label": "KOReader Plugin"}
+      ]
+    }]
+  ]
+}

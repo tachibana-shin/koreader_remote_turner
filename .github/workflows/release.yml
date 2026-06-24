@@ -5,17 +5,14 @@ on:
     branches: [main]
 
 jobs:
-  ci:
-    uses: ./.github/workflows/check.yml
-  semantic:
+  check:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.semantic.outputs.version }}
-      released: ${{ steps.semantic.outputs.released }}
+      version: ${{ steps.dry.outputs.version }}
+      should_release: ${{ steps.dry.outputs.should_release }}
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
           fetch-depth: 0
 
       - uses: actions/setup-node@v4
@@ -24,24 +21,24 @@ jobs:
 
       - run: npm i
 
-      - name: Semantic release
-        id: semantic
+      - name: Dry run
+        id: dry
         run: |
-          BEFORE=$(git tag -l 'v*' --sort=-version:refname | head -1)
-          npx semantic-release
-          AFTER=$(git tag -l 'v*' --sort=-version:refname | head -1)
-          if [ -n "$AFTER" ] && [ "$BEFORE" != "$AFTER" ]; then
-            echo "released=true" >> "$GITHUB_OUTPUT"
-            echo "version=${AFTER#v}" >> "$GITHUB_OUTPUT"
+          OUTPUT=$(npx semantic-release --dry-run 2>&1 || true)
+          echo "$OUTPUT"
+          VERSION=$(echo "$OUTPUT" | grep -oP 'The next release version is \K\S+')
+          if [ -n "$VERSION" ]; then
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           else
-            echo "released=false" >> "$GITHUB_OUTPUT"
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
-    needs: semantic
-    if: needs.semantic.outputs.released == 'true'
+    needs: check
+    if: needs.check.outputs.should_release == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -59,8 +56,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: v${{ needs.semantic.outputs.version }}
 
       - name: Setup Flutter SDK
         uses: flutter-actions/setup-flutter@v4
@@ -83,7 +78,7 @@ jobs:
         run: |
           brew install --quiet ninja libimobiledevice || true
 
-      - run: make ${{ matrix.target }} VERSION=${{ needs.semantic.outputs.version }}
+      - run: make ${{ matrix.target }} VERSION=${{ needs.check.outputs.version }}
         env:
           BUILD_NUMBER: ${{ github.run_number }}
 
@@ -92,20 +87,25 @@ jobs:
           name: build-${{ matrix.target }}
           path: dist/*
 
-  publish:
-    needs: [semantic, build]
-    if: needs.semantic.outputs.released == 'true'
+  release:
+    needs: [check, build]
+    if: needs.check.outputs.should_release == 'true'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
       - uses: actions/download-artifact@v4
-      - name: Upload assets to release
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 25
+
+      - run: npm i
+
+      - name: Semantic release
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: v${{ needs.semantic.outputs.version }}
-        run: |
-          shopt -s globstar
-          for f in build-*/**/*; do
-            if [ -f "$f" ]; then
-              gh release upload "$VERSION" "$f" --clobber
-            fi
-          done
