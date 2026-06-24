@@ -17,13 +17,13 @@ import AVFoundation
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
 
-    guard let messenger = engineBridge.engine?.binaryMessenger else { return }
+    let messenger = engineBridge.binaryMessenger
 
     let methodChannel = FlutterMethodChannel(
       name: "git.shin.koreader_remote_turner/service",
       binaryMessenger: messenger
     )
-    methodChannel.setMethodCallHandler { [weak self] (call, result) in
+    methodChannel.setMethodCallHandler { [weak self] (call: FlutterMethodCall, result: @escaping FlutterResult) in
       switch call.method {
       case "startService":
         self?.startVolumeMonitoring()
