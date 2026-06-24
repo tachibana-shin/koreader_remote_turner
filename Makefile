@@ -37,22 +37,14 @@ windows:
 
 macos:
 	mkdir -p $(DIST_DIR)
-	# Build arm64 slice (explicit arch for cross-compile on Intel runners)
-	ARCHS=arm64 flutter build macos --release --build-name=$(VERSION) --build-number=$(BUILD_NUMBER)
-	mv build/macos/Build/Products/Release/koreader_remote_turner.app \
-		/tmp/koreader_remote_turner_arm64.app
-	# Build x86_64 slice
-	rm -rf build/macos
-	ARCHS=x86_64 flutter build macos --release --build-name=$(VERSION) --build-number=$(BUILD_NUMBER)
-	# Lipo arm64 + x86_64 into universal binary
-	lipo -create \
-		/tmp/koreader_remote_turner_arm64.app/Contents/MacOS/koreader_remote_turner \
-		build/macos/Build/Products/Release/koreader_remote_turner.app/Contents/MacOS/koreader_remote_turner \
-		-output build/macos/Build/Products/Release/koreader_remote_turner.app/Contents/MacOS/koreader_remote_turner
-	# Merge frameworks (ditto merges directory trees)
-	ditto /tmp/koreader_remote_turner_arm64.app/Contents/Frameworks \
-		build/macos/Build/Products/Release/koreader_remote_turner.app/Contents/Frameworks
-	# Create DMG
+	flutter build macos --release --build-name=$(VERSION) --build-number=$(BUILD_NUMBER) --config-only
+	xcodebuild -workspace macos/Runner.xcworkspace \
+		-scheme Runner \
+		-configuration Release \
+		-derivedDataPath build/macos \
+		ARCHS="x86_64 arm64" \
+		ONLY_ACTIVE_ARCH=NO \
+		BUILD_DIR=build/macos/Build/Products
 	hdiutil create -srcFolder build/macos/Build/Products/Release/koreader_remote_turner.app \
 		-format UDZO -volname "KOReader Remote Turner" \
 		$(DIST_DIR)/koreader-remote-$(VERSION)-macos-universal.dmg
