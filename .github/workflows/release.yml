@@ -69,16 +69,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Flutter SDK (arm64)
-        if: matrix.arch == 'arm64'
-        run: |
-          wget -q https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_arm64_3.44.2-stable.tar.xz
-          sudo tar xf flutter_linux_arm64_3.44.2-stable.tar.xz -C /opt
-          echo "/opt/flutter/bin" >> "$GITHUB_PATH"
-
-      - name: Setup Flutter SDK
-        if: matrix.arch != 'arm64'
-        uses: flutter-actions/setup-flutter@v4
+      - uses: flutter-actions/setup-flutter@v4
         with:
           channel: stable
           version: 3.44.2
