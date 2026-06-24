@@ -28,9 +28,9 @@ jobs:
         id: semantic
         run: |
           BEFORE=$(git tag -l 'v*' --sort=-version:refname | head -1)
-          npx semantic-release 2>&1 || true
+          npx semantic-release
           AFTER=$(git tag -l 'v*' --sort=-version:refname | head -1)
-          if [ "$BEFORE" != "$AFTER" ] && [ -n "$AFTER" ]; then
+          if [ -n "$AFTER" ] && [ "$BEFORE" != "$AFTER" ]; then
             echo "released=true" >> "$GITHUB_OUTPUT"
             echo "version=${AFTER#v}" >> "$GITHUB_OUTPUT"
           else
