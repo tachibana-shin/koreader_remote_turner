@@ -21,8 +21,10 @@ android:
 		$(DIST_DIR)/koreader-remote-$(VERSION)-android.apk
 
 ios:
-	mkdir -p $(DIST_DIR)
+	mkdir -p $(DIST_DIR) build/ios/ipa/Payload
 	flutter build ipa --no-codesign --build-name=$(VERSION) --build-number=$(BUILD_NUMBER)
+	cp -R build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app build/ios/ipa/Payload/
+	cd build/ios/ipa && zip -r Runner.ipa Payload
 	cp build/ios/ipa/Runner.ipa \
 		$(DIST_DIR)/koreader-remote-$(VERSION)-ios.ipa
 
