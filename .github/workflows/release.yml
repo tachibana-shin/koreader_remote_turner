@@ -60,9 +60,9 @@ jobs:
         with:
           ref: v${{ needs.semantic.outputs.version }}
 
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v3
         with:
-          flutter-version: stable
+          channel: stable
           cache: true
 
       - run: flutter pub get
