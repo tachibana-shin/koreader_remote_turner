@@ -174,10 +174,12 @@ class App extends KaeruWidget<App> {
                     appBar: AppBar(
                       title: pageTitles[currentTab.value].text.make(),
                       actions: currentTab.value == 1
-                          ? [IconButton(
-                              icon: Icons.delete_sweep.toIcon(),
-                              onPressed: () => serverState.logger.clear(),
-                            )]
+                          ? [
+                              IconButton(
+                                icon: Icons.delete_sweep.toIcon(),
+                                onPressed: () => serverState.logger.clear(),
+                              ),
+                            ]
                           : null,
                     ),
                     body: Center(
@@ -194,10 +196,12 @@ class App extends KaeruWidget<App> {
                 appBar: AppBar(
                   title: pageTitles[currentTab.value].text.make(),
                   actions: currentTab.value == 1
-                      ? [IconButton(
-                          icon: Icons.delete_sweep.toIcon(),
-                          onPressed: () => serverState.logger.clear(),
-                        )]
+                      ? [
+                          IconButton(
+                            icon: Icons.delete_sweep.toIcon(),
+                            onPressed: () => serverState.logger.clear(),
+                          ),
+                        ]
                       : null,
                 ),
                 body: pageBody(currentTab.value),
