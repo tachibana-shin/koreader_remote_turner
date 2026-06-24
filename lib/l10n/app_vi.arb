@@ -55,6 +55,7 @@
   "settingsAccessibilityEnabled": "Đã bật",
   "settingsAccessibilityDisabled": "Tắt",
   "settingsAccessibilityOpenSettings": "Mở Cài đặt",
+  "settingsAccessibilityDescription": "Ứng dụng sử dụng Dịch vụ trợ năng Android để chặn nút âm lượng ngay cả khi ứng dụng đang chạy nền (ví dụ: khi đang đọc trong KOReader).\n\nKhông có dữ liệu trợ năng nào được thu thập hoặc truyền đi. Dịch vụ chỉ lắng nghe các lần nhấn nút Tăng âm lượng và Giảm âm lượng.",
 
   "volumeUp": "Tăng âm lượng",
   "volumeDown": "Giảm âm lượng",

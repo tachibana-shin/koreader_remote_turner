@@ -131,17 +131,20 @@ class SettingsPage extends KaeruWidget<SettingsPage> {
         ListTile(
           leading: Icons.accessibility_new.toIcon(),
           title: t.settingsAccessibility.text.make(),
-          subtitle: (accessibilityEnabled.value
-                  ? t.settingsAccessibilityEnabled
-                  : t.settingsAccessibilityDisabled)
-              .text
-              .size(13)
-              .make(),
+          subtitle:
+              (accessibilityEnabled.value
+                      ? t.settingsAccessibilityEnabled
+                      : t.settingsAccessibilityDisabled)
+                  .text
+                  .size(13)
+                  .make(),
           trailing: TextButton(
-            onPressed: () => _showAccessibilityDialog(t, ctx, accessibilityEnabled.value),
+            onPressed: () =>
+                _showAccessibilityDialog(t, ctx, accessibilityEnabled.value),
             child: t.settingsAccessibilityOpenSettings.text.make(),
           ),
-          onTap: () => _showAccessibilityDialog(t, ctx, accessibilityEnabled.value),
+          onTap: () =>
+              _showAccessibilityDialog(t, ctx, accessibilityEnabled.value),
         ),
         24.vSpace,
         t.settingsKeyMapping.text.titleMedium.make(),
@@ -196,7 +199,11 @@ class SettingsPage extends KaeruWidget<SettingsPage> {
     };
   }
 
-  void _showAccessibilityDialog(AppLocalizations t, BuildContext ctx, bool isEnabled) {
+  void _showAccessibilityDialog(
+    AppLocalizations t,
+    BuildContext ctx,
+    bool isEnabled,
+  ) {
     if (isEnabled) {
       PlatformService.openAccessibilitySettings();
       return;
@@ -206,13 +213,7 @@ class SettingsPage extends KaeruWidget<SettingsPage> {
       builder: (c) => AlertDialog(
         title: t.settingsAccessibility.text.make(),
         content: [
-          'The app uses Android Accessibility Service to intercept volume '
-              'buttons even when the app is in the background (e.g., while '
-              'reading in KOReader).\n\n'
-              'No accessibility data is collected or transmitted. The service '
-              'only listens for Volume Up and Volume Down key presses.'
-              .text
-              .make(),
+          t.settingsAccessibilityDescription.text.make(),
         ].column(),
         actions: [
           TextButton(

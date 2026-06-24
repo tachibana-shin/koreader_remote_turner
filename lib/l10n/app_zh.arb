@@ -55,6 +55,7 @@
   "settingsAccessibilityEnabled": "已开启",
   "settingsAccessibilityDisabled": "已关闭",
   "settingsAccessibilityOpenSettings": "打开设置",
+  "settingsAccessibilityDescription": "应用使用 Android 无障碍服务来拦截音量按钮，即使应用在后台运行（例如在 KOReader 中阅读时）。\n\n不会收集或传输任何无障碍数据。该服务仅监听音量加和音量减按键。",
 
   "volumeUp": "音量加",
   "volumeDown": "音量减",

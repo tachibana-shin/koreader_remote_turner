@@ -13,8 +13,9 @@ class PlatformService {
   static Future<bool> requestNotificationPermission() async {
     if (!Platform.isAndroid) return true;
     try {
-      final result =
-          await _methodChannel.invokeMethod<bool>('requestNotificationPermission');
+      final result = await _methodChannel.invokeMethod<bool>(
+        'requestNotificationPermission',
+      );
       return result ?? false;
     } catch (_) {
       return false;
@@ -38,7 +39,9 @@ class PlatformService {
   static Future<bool> isAccessibilityServiceEnabled() async {
     if (!Platform.isAndroid) return false;
     try {
-      final result = await _methodChannel.invokeMethod<bool>('isAccessibilityServiceEnabled');
+      final result = await _methodChannel.invokeMethod<bool>(
+        'isAccessibilityServiceEnabled',
+      );
       return result ?? false;
     } catch (_) {
       return false;

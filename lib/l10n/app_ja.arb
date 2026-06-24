@@ -55,6 +55,7 @@
   "settingsAccessibilityEnabled": "有効",
   "settingsAccessibilityDisabled": "無効",
   "settingsAccessibilityOpenSettings": "設定を開く",
+  "settingsAccessibilityDescription": "このアプリはAndroidアクセシビリティサービスを使用して、アプリがバックグラウンドにある場合でも（例：KOReaderで読書中）音量ボタンをインターセプトします。\n\nアクセシビリティデータは収集または送信されません。このサービスは音量アップおよび音量ダウンのキー押下のみをリッスンします。",
 
   "volumeUp": "音量上げ",
   "volumeDown": "音量下げ",

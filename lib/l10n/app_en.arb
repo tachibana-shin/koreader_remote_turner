@@ -55,6 +55,7 @@
   "settingsAccessibilityEnabled": "Enabled",
   "settingsAccessibilityDisabled": "Disabled",
   "settingsAccessibilityOpenSettings": "Open Settings",
+  "settingsAccessibilityDescription": "The app uses Android Accessibility Service to intercept volume buttons even when the app is in the background (e.g., while reading in KOReader).\n\nNo accessibility data is collected or transmitted. The service only listens for Volume Up and Volume Down key presses.",
 
   "volumeUp": "Volume Up",
   "volumeDown": "Volume Down",
