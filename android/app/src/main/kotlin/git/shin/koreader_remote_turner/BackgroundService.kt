@@ -20,6 +20,32 @@ class BackgroundService : Service() {
         var mediaSession: MediaSession? = null
         var methodChannel: MethodChannel? = null
         var eventSink: EventChannel.EventSink? = null
+            set(value) {
+                field = value
+                if (value != null) {
+                    flushEventQueue()
+                }
+            }
+        private val eventQueue = mutableListOf<String>()
+
+        fun sendEvent(event: String) {
+            if (eventSink != null) {
+                eventSink?.success(event)
+            } else {
+                synchronized(eventQueue) {
+                    eventQueue.add(event)
+                }
+            }
+        }
+
+        private fun flushEventQueue() {
+            synchronized(eventQueue) {
+                for (event in eventQueue) {
+                    eventSink?.success(event)
+                }
+                eventQueue.clear()
+            }
+        }
     }
 
     override fun onCreate() {

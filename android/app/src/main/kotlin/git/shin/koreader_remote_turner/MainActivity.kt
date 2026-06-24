@@ -89,6 +89,22 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
+        if (event?.action == KeyEvent.ACTION_DOWN) {
+            when (event.keyCode) {
+                KeyEvent.KEYCODE_VOLUME_UP -> {
+                    BackgroundService.sendEvent("volume_up")
+                    return true
+                }
+                KeyEvent.KEYCODE_VOLUME_DOWN -> {
+                    BackgroundService.sendEvent("volume_down")
+                    return true
+                }
+            }
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -101,22 +117,6 @@ class MainActivity : FlutterActivity() {
             pendingPermissionResult = null
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (event?.action == KeyEvent.ACTION_DOWN) {
-            when (keyCode) {
-                KeyEvent.KEYCODE_VOLUME_UP -> {
-                    BackgroundService.eventSink?.success("volume_up")
-                    return true
-                }
-                KeyEvent.KEYCODE_VOLUME_DOWN -> {
-                    BackgroundService.eventSink?.success("volume_down")
-                    return true
-                }
-            }
-        }
-        return super.onKeyDown(keyCode, event)
     }
 
     private fun isAccessibilityServiceEnabled(): Boolean {

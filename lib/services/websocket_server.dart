@@ -10,12 +10,70 @@ class WebSocketServer {
   final ServerState state;
   final PasswordAuth auth;
   HttpServer? _server;
+  RawDatagramSocket? _udpSocket;
   bool _running = false;
   Timer? _idleTimer;
 
   WebSocketServer({required this.state, required this.auth});
 
+  static Future<String> _getLanIp() async {
+    try {
+      final interfaces = await NetworkInterface.list();
+      for (final iface in interfaces) {
+        for (final addr in iface.addresses) {
+          if (addr.type == InternetAddressType.IPv4 &&
+              addr.address.startsWith('192.168.')) {
+            return addr.address;
+          }
+        }
+      }
+      for (final iface in interfaces) {
+        for (final addr in iface.addresses) {
+          if (addr.type == InternetAddressType.IPv4 &&
+              (addr.address.startsWith('10.') ||
+               addr.address.startsWith('172.16.') ||
+               addr.address.startsWith('172.17.') ||
+               addr.address.startsWith('172.18.') ||
+               addr.address.startsWith('172.19.') ||
+               addr.address.startsWith('172.20.') ||
+               addr.address.startsWith('172.21.') ||
+               addr.address.startsWith('172.22.') ||
+               addr.address.startsWith('172.23.') ||
+               addr.address.startsWith('172.24.') ||
+               addr.address.startsWith('172.25.') ||
+               addr.address.startsWith('172.26.') ||
+               addr.address.startsWith('172.27.') ||
+               addr.address.startsWith('172.28.') ||
+               addr.address.startsWith('172.29.') ||
+               addr.address.startsWith('172.30.') ||
+               addr.address.startsWith('172.31.'))) {
+            return addr.address;
+          }
+        }
+      }
+    } catch (_) {}
+    return '127.0.0.1';
+  }
+
   bool get isRunning => _running;
+
+  void _startUdpDiscovery(int port) {
+    RawDatagramSocket.bind(InternetAddress.anyIPv4, port).then((socket) {
+      _udpSocket = socket;
+      socket.broadcastEnabled = true;
+      socket.listen((event) {
+        if (event != RawSocketEvent.read) return;
+        final datagram = socket.receive();
+        if (datagram == null) return;
+        final msg = String.fromCharCodes(datagram.data);
+        if (msg == 'remote_turner_discover') {
+          final ip = state.serverAddress.value;
+          final response = 'remote_turner:$ip:$port';
+          socket.send(response.codeUnits, datagram.address, datagram.port);
+        }
+      });
+    }).catchError((_) {});
+  }
 
   Future<void> start() async {
     if (_running) return;
@@ -25,9 +83,10 @@ class WebSocketServer {
       _running = true;
       state.serverRunning.value = true;
       state.connectionState.value = ServerConnectionState.waiting;
-      state.serverAddress.value = _server!.address.address;
+      state.serverAddress.value = await _getLanIp();
       state.serverPort.value = port.toString();
       _server!.listen(_handleRequest, onError: _handleError);
+      _startUdpDiscovery(port);
       _resetIdleTimer();
       final granted = await PlatformService.requestNotificationPermission();
       if (granted) {
@@ -48,6 +107,8 @@ class WebSocketServer {
   Future<void> stop() async {
     _running = false;
     _idleTimer?.cancel();
+    _udpSocket?.close();
+    _udpSocket = null;
     for (final client in state.clients.value) {
       await client.close();
     }

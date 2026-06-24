@@ -49,9 +49,6 @@ class App extends KaeruWidget<App> {
       await passwordAuth.load();
       await serverState.logger.init();
       serverState.replayLogs();
-      await settingsService.getAutoStart().then((auto) {
-        if (auto) wsServer.start();
-      });
 
       PlatformService.volumeEvents.listen((event) {
         final key = event == 'volume_up'
@@ -59,6 +56,10 @@ class App extends KaeruWidget<App> {
             : LogicalKeyboardKey.audioVolumeDown;
         final action = keyboardService.actionForKey(key);
         if (action != null) keyboardService.actionRef.value = action;
+      });
+
+      await settingsService.getAutoStart().then((auto) {
+        if (auto) wsServer.start();
       });
     });
 

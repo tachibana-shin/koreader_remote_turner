@@ -24,11 +24,11 @@ class VolumeKeyService : AccessibilityService() {
         if (event.action == KeyEvent.ACTION_DOWN) {
             when (event.keyCode) {
                 KeyEvent.KEYCODE_VOLUME_UP -> {
-                    BackgroundService.eventSink?.success("volume_up")
+                    BackgroundService.sendEvent("volume_up")
                     return true
                 }
                 KeyEvent.KEYCODE_VOLUME_DOWN -> {
-                    BackgroundService.eventSink?.success("volume_down")
+                    BackgroundService.sendEvent("volume_down")
                     return true
                 }
             }
