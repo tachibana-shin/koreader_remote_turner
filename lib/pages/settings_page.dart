@@ -212,9 +212,7 @@ class SettingsPage extends KaeruWidget<SettingsPage> {
       context: ctx,
       builder: (c) => AlertDialog(
         title: t.settingsAccessibility.text.make(),
-        content: [
-          t.settingsAccessibilityDescription.text.make(),
-        ].column(),
+        content: [t.settingsAccessibilityDescription.text.make()].column(),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(c).pop(),
