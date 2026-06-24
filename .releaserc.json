@@ -11,11 +11,13 @@
     ["@semantic-release/github", {
       "assets": [
         {"path": "build-*/*.apk", "label": "Android APK"},
-        {"path": "build-*/*.deb", "label": "Linux DEB (amd64 + arm64)"},
-        {"path": "build-*/*.exe", "label": "Windows Installer (amd64 + arm64)"},
+        {"path": "build-*/*amd64.deb", "label": "Linux DEB (amd64)"},
+        {"path": "build-*/*arm64.deb", "label": "Linux DEB (arm64)"},
+        {"path": "build-*/*amd64.exe", "label": "Windows Installer (amd64)"},
+        {"path": "build-*/*arm64.exe", "label": "Windows Installer (arm64)"},
         {"path": "build-*/*.dmg", "label": "macOS DMG (arm64)"},
-        {"path": "build-*/*.zip", "label": "KOReader Plugin"},
-        {"path": "build-*/*.ipa", "label": "iOS IPA"}
+        {"path": "build-*/*.ipa", "label": "iOS IPA"},
+        {"path": "build-*/*.zip", "label": "KOReader Plugin"}
       ]
     }]
   ]

@@ -56,6 +56,9 @@ jobs:
             target: macos
             arch: arm64
           - os: macos-latest
+            target: ios
+            arch: universal
+          - os: macos-latest
             target: koplugin
             arch: noarch
           - os: windows-latest
@@ -101,7 +104,7 @@ jobs:
           architecture: x64
 
       - name: Install macOS toolchain
-        if: matrix.target == 'macos'
+        if: matrix.target == 'macos' || matrix.target == 'ios'
         run: |
           brew install --quiet ninja libimobiledevice || true
 
