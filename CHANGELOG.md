@@ -1,3 +1,11 @@
+## [1.0.2](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.0.1...v1.0.2) (2026-06-24)
+
+
+### Bug Fixes
+
+* android network permission ([e3fd82d](https://github.com/tachibana-shin/koreader_remote_turner/commit/e3fd82d70224bf6d537c49c7bb46be710f12f9f5))
+* macos build fail ([dc50fab](https://github.com/tachibana-shin/koreader_remote_turner/commit/dc50fab3363b81b6e8af54487aa3f51ef261d595))
+
 ## [1.0.1](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.0.0...v1.0.1) (2026-06-24)
 
 
