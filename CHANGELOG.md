@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.1.0...v1.2.0) (2026-06-24)
+
+
+### Features
+
+* implement UDP discovery service, improve event handling with a queue, and optimize volume key event dispatching. ([086c1f8](https://github.com/tachibana-shin/koreader_remote_turner/commit/086c1f86fbbde6337e2df4ce610f282675354d5e))
+
 # [1.1.0](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.0.2...v1.1.0) (2026-06-24)
 
 
