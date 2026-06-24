@@ -10,7 +10,7 @@ class AboutPage extends KaeruWidget<AboutPage> {
   static const _authorUrl = 'https://github.com/tachibana-shin';
   static const _repoUrl = 'https://github.com/tachibana-shin/koreader_remote_turner';
   static const _licenseUrl = 'https://www.gnu.org/licenses/agpl-3.0.html';
-  static const _donateUrl = 'https://github.com/sponsors/tachibana-shin';
+  static const _donateUrl = 'https://ko-fi.com/tachib_shin';
 
   @override
   Setup setup() {
@@ -33,7 +33,7 @@ class AboutPage extends KaeruWidget<AboutPage> {
           const Divider(height: 1),
           _UrlTile(icon: Icons.description, label: t.aboutLicense, subtitle: 'GNU AGPL v3', url: _licenseUrl),
           const Divider(height: 1),
-          _UrlTile(icon: Icons.favorite, label: t.aboutDonate, subtitle: 'GitHub Sponsors', url: _donateUrl),
+          _UrlTile(icon: Icons.favorite, label: t.aboutDonate, subtitle: 'Ko-fi', url: _donateUrl),
         ].column().card(),
       ].column(crossAxisAlignment: CrossAxisAlignment.start).p(16).scrollable();
     };
