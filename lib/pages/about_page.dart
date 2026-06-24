@@ -22,9 +22,7 @@ class AboutPage extends KaeruWidget<AboutPage> {
 
       return [
         Icons.menu_book.toIcon(size: 64, color: ctx.theme.colorScheme.primary),
-        8.vSpace,
-        t.aboutTitle.text.headlineSmall.make(),
-        8.vSpace,
+        16.vSpace,
         t.appDescription.text.bodyLarge.gray(600).make(),
         24.vSpace,
         [

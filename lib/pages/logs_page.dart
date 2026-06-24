@@ -27,7 +27,6 @@ class LogsPage extends KaeruWidget<LogsPage> {
       final entries = serverState.logger.entries.value;
 
       return [
-        t.logTitle.text.headlineSmall.make().p(16),
         entries.isEmpty
             ? t.logEmpty.text.make().centered
             : ListView.builder(

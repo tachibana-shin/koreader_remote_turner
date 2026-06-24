@@ -68,6 +68,11 @@ class EventLogger {
     _appendToFile(entry);
   }
 
+  void clear() {
+    entries.value = [];
+    _logFile?.writeAsString('');
+  }
+
   Future<void> _appendToFile(LogEntry entry) async {
     if (_logFile == null) return;
     await _logFile!.writeAsString(

@@ -68,8 +68,6 @@ class SettingsPage extends KaeruWidget<SettingsPage> {
       final t = AppLocalizations.of(ctx)!;
 
       return [
-        t.settingsTitle.text.headlineSmall.make(),
-        24.vSpace,
         t.settingsTheme.text.titleMedium.make(),
         8.vSpace,
         SegmentedButton<ThemeMode>(

@@ -33,6 +33,7 @@ class App extends KaeruWidget<App> {
     useListen(keyboardService.actionRef, () {
       final action = keyboardService.actionRef.value;
       if (action != null) {
+        keyboardService.actionRef.value = null;
         switch (action) {
           case KeyAction.forward:
             wsServer.sendAction('next_page');
@@ -88,6 +89,8 @@ class App extends KaeruWidget<App> {
 
     return () {
       final t = AppLocalizations.of(ctx)!;
+
+      final pageTitles = [t.tabHome, t.tabLogs, t.tabSettings, t.tabAbout];
 
       final destinations = [
         NavigationDestination(
@@ -168,6 +171,15 @@ class App extends KaeruWidget<App> {
                   ),
                   const VerticalDivider(width: 1),
                   Scaffold(
+                    appBar: AppBar(
+                      title: pageTitles[currentTab.value].text.make(),
+                      actions: currentTab.value == 1
+                          ? [IconButton(
+                              icon: Icons.delete_sweep.toIcon(),
+                              onPressed: () => serverState.logger.clear(),
+                            )]
+                          : null,
+                    ),
                     body: Center(
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 800),
@@ -179,6 +191,15 @@ class App extends KaeruWidget<App> {
               }
 
               return Scaffold(
+                appBar: AppBar(
+                  title: pageTitles[currentTab.value].text.make(),
+                  actions: currentTab.value == 1
+                      ? [IconButton(
+                          icon: Icons.delete_sweep.toIcon(),
+                          onPressed: () => serverState.logger.clear(),
+                        )]
+                      : null,
+                ),
                 body: pageBody(currentTab.value),
                 bottomNavigationBar: NavigationBar(
                   selectedIndex: currentTab.value,
