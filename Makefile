@@ -1,5 +1,9 @@
 VERSION ?= $(shell git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "0.0.0")
 BUILD_NUMBER ?= $(shell git rev-list --count HEAD 2>/dev/null || echo "1")
+ARCH ?= $(shell uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
+FLUTTER_PLATFORM_amd64 := x64
+FLUTTER_PLATFORM_arm64 := arm64
+FLUTTER_PLATFORM = $(FLUTTER_PLATFORM_$(ARCH))
 DIST_DIR ?= dist
 PLUGIN_DIR ?= remote_turner.koplugin
 
@@ -24,6 +28,8 @@ windows:
 	flutter build windows --release --build-name=$(VERSION) --build-number=$(BUILD_NUMBER)
 	iscc installers/windows/setup.iss \
 		/dMyAppVer=$(VERSION) \
+		/dMyAppArch=$(ARCH) \
+		/dMyAppPlatform=$(FLUTTER_PLATFORM) \
 		/dOutputDir=$(abspath $(DIST_DIR))
 
 macos:
@@ -31,12 +37,12 @@ macos:
 	flutter build macos --release --build-name=$(VERSION) --build-number=$(BUILD_NUMBER)
 	hdiutil create -srcFolder build/macos/Build/Products/Release/koreader_remote_turner.app \
 		-format UDZO -volname "KOReader Remote Turner" \
-		$(DIST_DIR)/koreader-remote-$(VERSION)-macos.dmg
+		$(DIST_DIR)/koreader-remote-$(VERSION)-macos-$(ARCH).dmg
 
 linux:
 	mkdir -p $(DIST_DIR)
 	flutter build linux --release --build-name=$(VERSION) --build-number=$(BUILD_NUMBER)
-	bash scripts/build-deb.sh $(VERSION)
+	bash scripts/build-deb.sh $(VERSION) $(ARCH)
 
 koplugin:
 	mkdir -p $(DIST_DIR)

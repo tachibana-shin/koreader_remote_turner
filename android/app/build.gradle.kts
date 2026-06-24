@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "git.shin.koreader_remote_turner"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

@@ -45,14 +45,28 @@ jobs:
         include:
           - os: ubuntu-latest
             target: android
+            arch: universal
           - os: ubuntu-latest
             target: linux
+            arch: amd64
+          - os: ubuntu-24.04-arm
+            target: linux
+            arch: arm64
           - os: macos-latest
             target: macos
+            arch: arm64
+          - os: macos-13
+            target: macos
+            arch: amd64
           - os: macos-latest
             target: koplugin
+            arch: noarch
           - os: windows-latest
             target: windows
+            arch: amd64
+          - os: windows-11-arm
+            target: windows
+            arch: arm64
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -78,13 +92,14 @@ jobs:
         run: |
           brew install --quiet ninja libimobiledevice || true
 
-      - run: make ${{ matrix.target }} VERSION=${{ needs.check.outputs.version }}
+      - name: Build
+        run: make ${{ matrix.target }} VERSION=${{ needs.check.outputs.version }} ARCH=${{ matrix.arch }}
         env:
           BUILD_NUMBER: ${{ github.run_number }}
 
       - uses: actions/upload-artifact@v4
         with:
-          name: build-${{ matrix.target }}
+          name: build-${{ matrix.target }}-${{ matrix.arch }}
           path: dist/*
 
   release:

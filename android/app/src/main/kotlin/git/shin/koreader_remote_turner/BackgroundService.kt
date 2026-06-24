@@ -10,6 +10,7 @@ import android.media.session.MediaSession
 import android.os.Build
 import android.os.IBinder
 import android.view.KeyEvent
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
@@ -26,7 +27,9 @@ class BackgroundService : Service() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
-        setupMediaSession()
+        if (Build.VERSION.SDK_INT >= 35) {
+            setupMediaSession()
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -82,6 +85,7 @@ class BackgroundService : Service() {
             .build()
     }
 
+    @RequiresApi(35)
     private fun setupMediaSession() {
         mediaSession = MediaSession(this, "KOReaderRemote")
         mediaSession?.setCallback(object : MediaSession.Callback() {

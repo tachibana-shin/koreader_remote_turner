@@ -2,6 +2,7 @@ package git.shin.koreader_remote_turner
 
 import android.content.Intent
 import android.os.Build
+import android.view.KeyEvent
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
@@ -53,5 +54,21 @@ class MainActivity : FlutterActivity() {
                 }
             })
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (Build.VERSION.SDK_INT < 35 && event?.action == KeyEvent.ACTION_DOWN) {
+            when (keyCode) {
+                KeyEvent.KEYCODE_VOLUME_UP -> {
+                    BackgroundService.eventSink?.success("volume_up")
+                    return true
+                }
+                KeyEvent.KEYCODE_VOLUME_DOWN -> {
+                    BackgroundService.eventSink?.success("volume_down")
+                    return true
+                }
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }
