@@ -37,8 +37,8 @@ windows:
 
 macos:
 	mkdir -p $(DIST_DIR)
-	# Build arm64 slice
-	flutter build macos --release --build-name=$(VERSION) --build-number=$(BUILD_NUMBER)
+	# Build arm64 slice (explicit arch for cross-compile on Intel runners)
+	ARCHS=arm64 flutter build macos --release --build-name=$(VERSION) --build-number=$(BUILD_NUMBER)
 	mv build/macos/Build/Products/Release/koreader_remote_turner.app \
 		/tmp/koreader_remote_turner_arm64.app
 	# Build x86_64 slice
