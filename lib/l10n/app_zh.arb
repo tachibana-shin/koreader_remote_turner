@@ -51,9 +51,14 @@
   "settingsPasswordNone": "无密码",
   "settingsPasswordSet": "设置密码",
   "settingsSave": "保存",
+  "settingsAccessibility": "无障碍服务",
+  "settingsAccessibilityEnabled": "已开启",
+  "settingsAccessibilityDisabled": "已关闭",
+  "settingsAccessibilityOpenSettings": "打开设置",
 
   "volumeUp": "音量加",
   "volumeDown": "音量减",
   "enter": "Enter",
-  "none": "无"
+  "none": "无",
+  "cancel": "取消"
 }

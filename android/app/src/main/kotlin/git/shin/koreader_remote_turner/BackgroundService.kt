@@ -9,8 +9,6 @@ import android.content.Intent
 import android.media.session.MediaSession
 import android.os.Build
 import android.os.IBinder
-import android.view.KeyEvent
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
@@ -27,9 +25,7 @@ class BackgroundService : Service() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
-        if (Build.VERSION.SDK_INT >= 35) {
-            setupMediaSession()
-        }
+        setupMediaSession()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -85,20 +81,8 @@ class BackgroundService : Service() {
             .build()
     }
 
-    @RequiresApi(35)
     private fun setupMediaSession() {
         mediaSession = MediaSession(this, "KOReaderRemote")
-        mediaSession?.setCallback(object : MediaSession.Callback() {
-            override fun onVolumeKeyEvent(event: KeyEvent): Boolean {
-                if (event.action == KeyEvent.ACTION_DOWN) {
-                    when (event.keyCode) {
-                        KeyEvent.KEYCODE_VOLUME_UP -> eventSink?.success("volume_up")
-                        KeyEvent.KEYCODE_VOLUME_DOWN -> eventSink?.success("volume_down")
-                    }
-                }
-                return super.onVolumeKeyEvent(event)
-            }
-        })
         mediaSession?.setFlags(
             MediaSession.FLAG_HANDLES_MEDIA_BUTTONS or
             MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS

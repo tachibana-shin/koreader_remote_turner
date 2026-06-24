@@ -29,7 +29,10 @@ class WebSocketServer {
       state.serverPort.value = port.toString();
       _server!.listen(_handleRequest, onError: _handleError);
       _resetIdleTimer();
-      await PlatformService.startForegroundService();
+      final granted = await PlatformService.requestNotificationPermission();
+      if (granted) {
+        await PlatformService.startForegroundService();
+      }
     } catch (e) {
       state.logger.log(
         LogEntry(

@@ -81,6 +81,25 @@ Build a Flutter app + KOReader plugin that listens to hardware volume buttons an
 - Event counts persisted across restarts via log replay.
 - Theme selector (Light/Dark/System), auto-start toggle, locale support (en/vi/ja/zh).
 
+## Android Background Volume Interception
+- **MediaSession `onVolumeKeyEvent` does NOT exist** in public Android SDK at any API level (wrong assumption, now removed).
+- **`MainActivity.onKeyDown`** — works when app is in **foreground** (all API levels).
+- **`VolumeKeyService`** — `AccessibilityService` that intercepts global volume keys via `onKeyEvent()` (API 18+). Must be enabled by user in Settings > Accessibility.
+  - `VolumeKeyService.kt` at `android/app/src/main/kotlin/git/shin/koreader_remote_turner/`
+  - Config at `android/app/src/main/res/xml/accessibility_service_config.xml`
+  - Declaration in `AndroidManifest.xml` with `BIND_ACCESSIBILITY_SERVICE` permission
+  - Flutter Settings page shows status + button to open Accessibility settings
+- `actions/setup-java@v4` with `architecture: x64` on `windows-11-arm` runner fixes JNI arch mismatch (`jni` transitively pulled by `path_provider_android`).
+
+## Critical Context
+- `useContext()` must be called **only** inside a `KaeruWidget.setup()` function.
+- `LayoutBuilder` inside a Kaeru builder must be wrapped in `Watch(() { … })`.
+- VText chain order: `String → .text → VText chain → .make() → Text → Widget chain`.
+- `KnownKeys.all` map lives in `keyboard_listener.dart` (65+ entries).
+- `compileSdk = 36` in `android/app/build.gradle.kts` (required by `shared_preferences_android`, `url_launcher_android`, `androidx.core`).
+- Windows Inno Setup uses `MyAppPlatform` define for arch-specific build path.
+- Linux `build-deb.sh` uses platform mapping: amd64→x64, arm64→arm64.
+
 ## Next Steps
 - Build & test on real Android device/emulator.
 - iOS: `AVAudioSession` approach changes system volume + shows HUD — consider alternatives or document.

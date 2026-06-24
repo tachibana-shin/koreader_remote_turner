@@ -7,6 +7,7 @@ import 'package:kaeru_ui/kaeru_ui.dart';
 import '../l10n/app_localizations.dart';
 import '../models/server_state.dart';
 import '../services/keyboard_listener.dart';
+import '../services/platform_service.dart';
 import '../services/settings_service.dart';
 import '../services/password_auth.dart';
 
@@ -44,9 +45,12 @@ class SettingsPage extends KaeruWidget<SettingsPage> {
     final onlyWhileOpen = ref(keyboardService.config.onlyWhileOpen);
     final autoStart = ref(true);
     final themeMode = ref(ThemeMode.system);
+    final accessibilityEnabled = ref(false);
     onMounted(() async {
       autoStart.value = await settingsService.getAutoStart();
       themeMode.value = await settingsService.getThemeMode();
+      accessibilityEnabled.value =
+          await PlatformService.isAccessibilityServiceEnabled();
     });
 
     void saveKeys() {
@@ -122,6 +126,24 @@ class SettingsPage extends KaeruWidget<SettingsPage> {
           },
         ),
         24.vSpace,
+        t.settingsAccessibility.text.titleMedium.make(),
+        8.vSpace,
+        ListTile(
+          leading: Icons.accessibility_new.toIcon(),
+          title: t.settingsAccessibility.text.make(),
+          subtitle: (accessibilityEnabled.value
+                  ? t.settingsAccessibilityEnabled
+                  : t.settingsAccessibilityDisabled)
+              .text
+              .size(13)
+              .make(),
+          trailing: TextButton(
+            onPressed: () => _showAccessibilityDialog(t, ctx, accessibilityEnabled.value),
+            child: t.settingsAccessibilityOpenSettings.text.make(),
+          ),
+          onTap: () => _showAccessibilityDialog(t, ctx, accessibilityEnabled.value),
+        ),
+        24.vSpace,
         t.settingsKeyMapping.text.titleMedium.make(),
         8.vSpace,
         _KeyRecorder(
@@ -172,6 +194,42 @@ class SettingsPage extends KaeruWidget<SettingsPage> {
         ),
       ].column(crossAxisAlignment: CrossAxisAlignment.start).p(16).scrollable();
     };
+  }
+
+  void _showAccessibilityDialog(AppLocalizations t, BuildContext ctx, bool isEnabled) {
+    if (isEnabled) {
+      PlatformService.openAccessibilitySettings();
+      return;
+    }
+    showDialog(
+      context: ctx,
+      builder: (c) => AlertDialog(
+        title: t.settingsAccessibility.text.make(),
+        content: [
+          'The app uses Android Accessibility Service to intercept volume '
+              'buttons even when the app is in the background (e.g., while '
+              'reading in KOReader).\n\n'
+              'No accessibility data is collected or transmitted. The service '
+              'only listens for Volume Up and Volume Down key presses.'
+              .text
+              .make(),
+        ].column(),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(c).pop(),
+            child: t.cancel.text.make(),
+          ),
+          FilledButton.icon(
+            icon: Icons.settings.toIcon(),
+            onPressed: () {
+              Navigator.of(c).pop();
+              PlatformService.openAccessibilitySettings();
+            },
+            label: t.settingsAccessibilityOpenSettings.text.make(),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showPasswordDialog(AppLocalizations t, BuildContext ctx) {

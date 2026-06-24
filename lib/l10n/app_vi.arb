@@ -51,9 +51,14 @@
   "settingsPasswordNone": "Không có mật khẩu",
   "settingsPasswordSet": "Đặt mật khẩu",
   "settingsSave": "Lưu",
+  "settingsAccessibility": "Dịch vụ trợ năng",
+  "settingsAccessibilityEnabled": "Đã bật",
+  "settingsAccessibilityDisabled": "Tắt",
+  "settingsAccessibilityOpenSettings": "Mở Cài đặt",
 
   "volumeUp": "Tăng âm lượng",
   "volumeDown": "Giảm âm lượng",
   "enter": "Enter",
-  "none": "Không"
+  "none": "Không",
+  "cancel": "Huỷ"
 }

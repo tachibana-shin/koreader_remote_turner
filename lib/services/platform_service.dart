@@ -10,22 +10,50 @@ class PlatformService {
     'git.shin.koreader_remote_turner/events',
   );
 
+  static Future<bool> requestNotificationPermission() async {
+    if (!Platform.isAndroid) return true;
+    try {
+      final result =
+          await _methodChannel.invokeMethod<bool>('requestNotificationPermission');
+      return result ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   static Future<void> startForegroundService() async {
-    if (!Platform.isAndroid && !Platform.isIOS) return;
+    if (!Platform.isAndroid) return;
     try {
       await _methodChannel.invokeMethod('startService');
     } catch (_) {}
   }
 
   static Future<void> stopForegroundService() async {
-    if (!Platform.isAndroid && !Platform.isIOS) return;
+    if (!Platform.isAndroid) return;
     try {
       await _methodChannel.invokeMethod('stopService');
     } catch (_) {}
   }
 
+  static Future<bool> isAccessibilityServiceEnabled() async {
+    if (!Platform.isAndroid) return false;
+    try {
+      final result = await _methodChannel.invokeMethod<bool>('isAccessibilityServiceEnabled');
+      return result ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<void> openAccessibilitySettings() async {
+    if (!Platform.isAndroid) return;
+    try {
+      await _methodChannel.invokeMethod('openAccessibilitySettings');
+    } catch (_) {}
+  }
+
   static Stream<String> get volumeEvents {
-    if (!Platform.isAndroid && !Platform.isIOS) {
+    if (!Platform.isAndroid) {
       return const Stream.empty();
     }
     return _eventChannel

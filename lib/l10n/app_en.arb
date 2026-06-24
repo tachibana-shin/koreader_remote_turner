@@ -51,9 +51,14 @@
   "settingsPasswordNone": "No password",
   "settingsPasswordSet": "Set password",
   "settingsSave": "Save",
+  "settingsAccessibility": "Accessibility Service",
+  "settingsAccessibilityEnabled": "Enabled",
+  "settingsAccessibilityDisabled": "Disabled",
+  "settingsAccessibilityOpenSettings": "Open Settings",
 
   "volumeUp": "Volume Up",
   "volumeDown": "Volume Down",
   "enter": "Enter",
-  "none": "None"
+  "none": "None",
+  "cancel": "Cancel"
 }

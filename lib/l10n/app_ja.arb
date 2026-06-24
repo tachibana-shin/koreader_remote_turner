@@ -51,9 +51,14 @@
   "settingsPasswordNone": "パスワードなし",
   "settingsPasswordSet": "パスワード設定",
   "settingsSave": "保存",
+  "settingsAccessibility": "アクセシビリティサービス",
+  "settingsAccessibilityEnabled": "有効",
+  "settingsAccessibilityDisabled": "無効",
+  "settingsAccessibilityOpenSettings": "設定を開く",
 
   "volumeUp": "音量上げ",
   "volumeDown": "音量下げ",
   "enter": "Enter",
-  "none": "なし"
+  "none": "なし",
+  "cancel": "キャンセル"
 }
