@@ -48,4 +48,7 @@ app.*.map.json
 /dist/
 /node_modules/
 
+# CI Flutter cache
+/_flutter/
+
 

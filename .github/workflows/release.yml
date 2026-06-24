@@ -5,6 +5,8 @@ on:
     branches: [main]
 
 jobs:
+  ci:
+    uses: ./.github/workflows/check.yml
   semantic:
     runs-on: ubuntu-latest
     outputs:
@@ -60,10 +62,17 @@ jobs:
         with:
           ref: v${{ needs.semantic.outputs.version }}
 
-      - uses: subosito/flutter-action@v3
+      - name: Cache Flutter
+        id: cache-flutter
+        uses: actions/cache@v4
         with:
-          channel: stable
-          cache: true
+          path: _flutter
+          key: flutter-stable-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+      - name: Install Flutter
+        if: steps.cache-flutter.outputs.cache-hit != 'true'
+        run: git clone --depth 1 https://github.com/flutter/flutter.git -b stable _flutter
+      - name: Add Flutter to PATH
+        run: echo "$(pwd)/_flutter/bin" >> $GITHUB_PATH
 
       - run: flutter pub get
 
