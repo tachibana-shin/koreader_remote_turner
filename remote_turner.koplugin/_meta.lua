@@ -3,5 +3,5 @@ return {
     fullname = _("Remote Turner"),
     description = _(
         [[Remote control KOReader via Flutter app. Turn pages forward/backward and send sleep commands wirelessly.]]),
-    version = "1.2.0",
+    version = "1.3.0",
 }

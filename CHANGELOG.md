@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.2.0...v1.3.0) (2026-06-24)
+
+
+### Features
+
+* add log clearing functionality and implement persistent app bar with navigation titles ([9b1304c](https://github.com/tachibana-shin/koreader_remote_turner/commit/9b1304c3d569b98a6d54c5159f72c7af3c0ebbe3))
+
 # [1.2.0](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.1.0...v1.2.0) (2026-06-24)
 
 
