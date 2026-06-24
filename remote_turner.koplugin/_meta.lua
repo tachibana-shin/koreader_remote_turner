@@ -2,6 +2,6 @@ local _ = require("gettext")
 return {
     fullname = _("Remote Turner"),
     description = _(
-    [[Remote control KOReader via Flutter app. Turn pages forward/backward and send sleep commands wirelessly.]]),
+        [[Remote control KOReader via Flutter app. Turn pages forward/backward and send sleep commands wirelessly.]]),
     version = "0.0.0",
 }

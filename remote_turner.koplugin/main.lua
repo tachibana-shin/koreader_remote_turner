@@ -95,7 +95,7 @@ local function create_ws_client()
     }
 end
 
-function RemoteTurner:onDispatcherRegisterActions(_)
+function RemoteTurner.onDispatcherRegisterActions()
     Dispatcher:registerAction("remote_turner_next_page", {
         category = "none",
         event = "RemoteTurnerNextPage",
@@ -118,7 +118,7 @@ end
 
 function RemoteTurner:init()
     self.ws_client = create_ws_client()
-    self:onDispatcherRegisterActions()
+    self.onDispatcherRegisterActions()
     self.ui.menu:registerToMainMenu(self)
 end
 
@@ -163,7 +163,7 @@ function RemoteTurner:connect()
         port = calibre_url["port"]
     else
         -- try to discover the server via broadcast
-        local ok, discovered_host, discovered_port = self:discoverServer()
+        local ok, discovered_host, discovered_port = self.discoverServer()
         if not ok then
             UIManager:show(InfoMessage:new {
                 text = _("Could not find Remote Turner server. Please configure the address manually."),
@@ -202,14 +202,14 @@ function RemoteTurner:disconnect()
     end
 end
 
-function RemoteTurner:discoverServer()
+function RemoteTurner.discoverServer()
     local socket = require("socket")
     local udp = socket.udp4()
     udp:setoption("broadcast", true)
     udp:setsockname("*", 0)
     udp:settimeout(2)
 
-    local ok, err = udp:sendto("remote_turner_discover", "255.255.255.255", 9090)
+    local ok, _ = udp:sendto("remote_turner_discover", "255.255.255.255", 9090)
     if not ok then
         udp:close()
         return false
@@ -375,7 +375,7 @@ function RemoteTurner:startMessageLoop()
                     elseif data.action == "prev_page" then
                         self:onRemoteTurnerPrevPage()
                     elseif data.action == "sleep" then
-                        self:onRemoteTurnerSleep()
+                        self.onRemoteTurnerSleep()
                     end
                 end
             end
@@ -401,7 +401,7 @@ function RemoteTurner:startMessageLoop()
                         elseif data.action == "prev_page" then
                             self:onRemoteTurnerPrevPage()
                         elseif data.action == "sleep" then
-                            self:onRemoteTurnerSleep()
+                            self.onRemoteTurnerSleep()
                         end
                     end
                 end
@@ -421,7 +421,7 @@ function RemoteTurner:onRemoteTurnerPrevPage()
     self.ui:handleEvent(Event:new("PageBackward"))
 end
 
-function RemoteTurner:onRemoteTurnerSleep()
+function RemoteTurner.onRemoteTurnerSleep()
     Device:suspend()
 end
 

@@ -74,9 +74,9 @@ function client:recv()
   local readable = socket.select({self._sock}, nil, 0)
   if #readable == 0 then return end
 
-  local data, err
+  local data
 
-  data, err = self._sock:receive(2)
+  data = self._sock:receive(2)
   if not data then return end
 
   local hdr = data
@@ -85,12 +85,12 @@ function client:recv()
   local masked = band(b2, 0x80) ~= 0
 
   if len == 126 then
-    data, err = self._sock:receive(2)
+    data = self._sock:receive(2)
     if not data then return end
     hdr = hdr .. data
     len = string.byte(data, 1) * 256 + string.byte(data, 2)
   elseif len == 127 then
-    data, err = self._sock:receive(8)
+    data = self._sock:receive(8)
     if not data then return end
     hdr = hdr .. data
     len = 0
@@ -101,7 +101,7 @@ function client:recv()
 
   local mask_key
   if masked then
-    data, err = self._sock:receive(4)
+    data = self._sock:receive(4)
     if not data then return end
     mask_key = data
     hdr = hdr .. mask_key
@@ -109,7 +109,7 @@ function client:recv()
 
   local payload = ""
   if len > 0 then
-    data, err = self._sock:receive(len)
+    data = self._sock:receive(len)
     if not data then return end
     payload = data
   end
@@ -169,15 +169,16 @@ local function connect(url)
 
   local key = generate_key()
   local req = string.format(
-    "GET %s HTTP/1.1\r\nHost: %s:%d\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Key: %s\r\nSec-WebSocket-Version: 13\r\n\r\n",
+    "GET %s HTTP/1.1\r\nHost: %s:%d\r\nUpgrade: websocket\r\n" ..
+      "Connection: Upgrade\r\nSec-WebSocket-Key: %s\r\nSec-WebSocket-Version: 13\r\n\r\n",
     path, host, port, key
   )
 
   ok, err = tcp:send(req)
   if not ok then tcp:close() return nil, err end
 
-  local resp, err2
-  resp, err2 = tcp:receive("*l")
+  local resp
+  resp = tcp:receive("*l")
   if not resp then tcp:close() return nil, "no response" end
   if not resp:find("101") then
     tcp:close()
@@ -185,7 +186,7 @@ local function connect(url)
   end
 
   while true do
-    resp, err2 = tcp:receive("*l")
+    resp = tcp:receive("*l")
     if not resp then tcp:close() return nil, "incomplete headers" end
     if resp == "" then break end
   end
