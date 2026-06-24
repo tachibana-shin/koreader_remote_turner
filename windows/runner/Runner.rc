@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "git.shin" "\0"
-            VALUE "FileDescription", "koreader_remote_turner" "\0"
+            VALUE "FileDescription", "KoReader Remote" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "koreader_remote_turner" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 Tachibana Shin. All rights reserved." "\0"
             VALUE "OriginalFilename", "koreader_remote_turner.exe" "\0"
-            VALUE "ProductName", "koreader_remote_turner" "\0"
+            VALUE "ProductName", "KoReader Remote" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
