@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.0.2...v1.1.0) (2026-06-24)
+
+
+### Features
+
+* add INTERNET permission to Android manifest ([c5fc386](https://github.com/tachibana-shin/koreader_remote_turner/commit/c5fc38635b5559b98b86cfa5dbfab0daa2400d6c))
+
 ## [1.0.2](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.0.1...v1.0.2) (2026-06-24)
 
 
