@@ -8,7 +8,7 @@
 PRODUCT_NAME = koreader_remote_turner
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.koreaderRemoteTurner
+PRODUCT_BUNDLE_IDENTIFIER = git.shin.koreaderRemoteTurner
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2026 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 git.shin. All rights reserved.

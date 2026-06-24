@@ -11,7 +11,7 @@ class MainFlutterWindow: NSWindow {
     RegisterGeneratedPlugins(registry: flutterViewController)
 
     let methodChannel = FlutterMethodChannel(
-      name: "com.example.koreader_remote_turner/service",
+      name: "git.shin.koreader_remote_turner/service",
       binaryMessenger: flutterViewController.engine.binaryMessenger
     )
     methodChannel.setMethodCallHandler { (_, result) in
@@ -19,7 +19,7 @@ class MainFlutterWindow: NSWindow {
     }
 
     let eventChannel = FlutterEventChannel(
-      name: "com.example.koreader_remote_turner/events",
+      name: "git.shin.koreader_remote_turner/events",
       binaryMessenger: flutterViewController.engine.binaryMessenger
     )
     eventChannel.setStreamHandler(VolumeStreamHandler())

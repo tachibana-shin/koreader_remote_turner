@@ -1,4 +1,4 @@
-package com.example.koreader_remote_turner
+package git.shin.koreader_remote_turner
 
 import android.content.Intent
 import android.os.Build
@@ -8,8 +8,8 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
-    private val CHANNEL = "com.example.koreader_remote_turner/service"
-    private val EVENT_CHANNEL = "com.example.koreader_remote_turner/events"
+    private val CHANNEL = "git.shin.koreader_remote_turner/service"
+    private val EVENT_CHANNEL = "git.shin.koreader_remote_turner/events"
     private var eventSink: EventChannel.EventSink? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {

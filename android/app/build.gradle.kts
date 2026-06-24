@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.koreader_remote_turner"
+    namespace = "git.shin.koreader_remote_turner"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.koreader_remote_turner"
+        applicationId = "git.shin.koreader_remote_turner"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

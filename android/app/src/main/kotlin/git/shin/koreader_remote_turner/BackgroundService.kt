@@ -1,4 +1,4 @@
-package com.example.koreader_remote_turner
+package git.shin.koreader_remote_turner
 
 import android.app.Notification
 import android.app.NotificationChannel

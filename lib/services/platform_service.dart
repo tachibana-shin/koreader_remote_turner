@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 
 class PlatformService {
   static const _methodChannel = MethodChannel(
-    'com.example.koreader_remote_turner/service',
+    'git.shin.koreader_remote_turner/service',
   );
   static const _eventChannel = EventChannel(
-    'com.example.koreader_remote_turner/events',
+    'git.shin.koreader_remote_turner/events',
   );
 
   static Future<void> startForegroundService() async {
@@ -28,8 +28,11 @@ class PlatformService {
     if (!Platform.isAndroid && !Platform.isIOS) {
       return const Stream.empty();
     }
-    return _eventChannel.receiveBroadcastStream().map((event) {
-      return event.toString();
-    }).handleError((_) {});
+    return _eventChannel
+        .receiveBroadcastStream()
+        .map((event) {
+          return event.toString();
+        })
+        .handleError((_) {});
   }
 }

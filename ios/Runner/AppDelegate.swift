@@ -20,7 +20,7 @@ import AVFoundation
     guard let messenger = engineBridge.engine?.binaryMessenger else { return }
 
     let methodChannel = FlutterMethodChannel(
-      name: "com.example.koreader_remote_turner/service",
+      name: "git.shin.koreader_remote_turner/service",
       binaryMessenger: messenger
     )
     methodChannel.setMethodCallHandler { [weak self] (call, result) in
@@ -37,7 +37,7 @@ import AVFoundation
     }
 
     let eventChannel = FlutterEventChannel(
-      name: "com.example.koreader_remote_turner/events",
+      name: "git.shin.koreader_remote_turner/events",
       binaryMessenger: messenger
     )
     eventChannel.setStreamHandler(self)
