@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.0.0...v1.0.1) (2026-06-24)
+
+
+### Bug Fixes
+
+* ci release ipa ([bf9c717](https://github.com/tachibana-shin/koreader_remote_turner/commit/bf9c71711e81e8ac7a41d5e115303215f6e56007))
+* ios crash method ([e3a834c](https://github.com/tachibana-shin/koreader_remote_turner/commit/e3a834cac0b2f25656c66e44f22ca351e82c71bd))
+
 # 1.0.0 (2026-06-24)
 
 
