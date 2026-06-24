@@ -6,7 +6,6 @@ local WidgetContainer = require("ui/widget/container/widgetcontainer")
 local _ = require("gettext")
 local C_ = _.pgettext
 local T = require("ffi/util").template
-local Device = require("device")
 local ws = require("websocket")
 
 local RemoteTurner = WidgetContainer:extend {
@@ -349,14 +348,26 @@ function RemoteTurner:getWirelessMenuTable()
     }
 end
 
+function RemoteTurner:_handleMessage(msg)
+    if not msg or not msg.data or msg.data == "" then return end
+    local ok, data = pcall(require("json").decode, msg.data)
+    if not ok or not data.action then return end
+    if data.action == "next_page" then
+        self.onRemoteTurnerNextPage()
+    elseif data.action == "prev_page" then
+        self.onRemoteTurnerPrevPage()
+    elseif data.action == "sleep" then
+        self.onRemoteTurnerSleep()
+    end
+end
+
 function RemoteTurner:startMessageLoop()
     if self._poll_cb then return end
-    if not self.ws_client or not self.ws_client.connected or not self.ws_client.socket then
-        return
-    end
-    self.ws_client.socket:settimeout(0)
+    local sock = self.ws_client and self.ws_client.socket
+    if not sock then return end
+    sock:settimeout(0)
 
-    local json = require("json")
+    local raw_sock = sock._sock
     local socket = require("socket")
     local function poll()
         if not self.ws_client or not self.ws_client.connected or not self.ws_client.socket then
@@ -364,23 +375,12 @@ function RemoteTurner:startMessageLoop()
             self.ws_client = nil
             return
         end
-        local can_read = socket.select({ self.ws_client.socket }, nil, 0)
+        local can_read = socket.select({ raw_sock }, nil, 0)
         if can_read and #can_read > 0 then
             local _, msg = self.ws_client.socket:recv()
-            if msg and msg.data and msg.data ~= "" then
-                local ok, data = pcall(json.decode, msg.data)
-                if ok and data.action then
-                    if data.action == "next_page" then
-                        self:onRemoteTurnerNextPage()
-                    elseif data.action == "prev_page" then
-                        self:onRemoteTurnerPrevPage()
-                    elseif data.action == "sleep" then
-                        self.onRemoteTurnerSleep()
-                    end
-                end
-            end
+            self:_handleMessage(msg)
         end
-        self._poll_cb = UIManager:scheduleIn(0.5, poll)
+        self._poll_cb = UIManager:scheduleIn(0.1, poll)
     end
     if UIManager.registerCheckCallback then
         self._check_cb = function()
@@ -390,21 +390,10 @@ function RemoteTurner:startMessageLoop()
                 self.ws_client = nil
                 return
             end
-            local can_read = socket.select({ self.ws_client.socket }, nil, 0)
+            local can_read = socket.select({ raw_sock }, nil, 0)
             if can_read and #can_read > 0 then
                 local _, msg = self.ws_client.socket:recv()
-                if msg and msg.data and msg.data ~= "" then
-                    local ok, data = pcall(json.decode, msg.data)
-                    if ok and data.action then
-                        if data.action == "next_page" then
-                            self:onRemoteTurnerNextPage()
-                        elseif data.action == "prev_page" then
-                            self:onRemoteTurnerPrevPage()
-                        elseif data.action == "sleep" then
-                            self.onRemoteTurnerSleep()
-                        end
-                    end
-                end
+                self:_handleMessage(msg)
             end
         end
         UIManager:registerCheckCallback(self._check_cb)
@@ -413,16 +402,16 @@ function RemoteTurner:startMessageLoop()
     end
 end
 
-function RemoteTurner:onRemoteTurnerNextPage()
-    self.ui:handleEvent(Event:new("PageForward"))
+function RemoteTurner.onRemoteTurnerNextPage()
+    UIManager:broadcastEvent(Event:new("GotoViewRel", 1))
 end
 
-function RemoteTurner:onRemoteTurnerPrevPage()
-    self.ui:handleEvent(Event:new("PageBackward"))
+function RemoteTurner.onRemoteTurnerPrevPage()
+    UIManager:broadcastEvent(Event:new("GotoViewRel", -1))
 end
 
 function RemoteTurner.onRemoteTurnerSleep()
-    Device:suspend()
+    UIManager:broadcastEvent(Event:new("RequestSuspend"))
 end
 
 return RemoteTurner
