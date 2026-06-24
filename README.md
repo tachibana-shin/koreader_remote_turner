@@ -134,4 +134,4 @@ Events are broadcast via `UIManager:broadcastEvent()`, which works for both page
 
 ## License
 
-MIT
+[AGPL-3.0 license](./LICENSE)
