@@ -69,7 +69,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Flutter SDK (arm64 Linux)
+        if: matrix.os == 'ubuntu-24.04-arm'
+        run: |
+          git clone --depth 1 -b 3.44.2 https://github.com/flutter/flutter.git /opt/flutter
+          /opt/flutter/bin/flutter --version
+          echo "/opt/flutter/bin" >> "$GITHUB_PATH"
+
       - uses: flutter-actions/setup-flutter@v4
+        if: matrix.os != 'ubuntu-24.04-arm'
         with:
           channel: stable
           version: 3.44.2
