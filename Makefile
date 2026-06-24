@@ -4,6 +4,9 @@ ARCH ?= $(shell uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
 FLUTTER_PLATFORM_amd64 := x64
 FLUTTER_PLATFORM_arm64 := arm64
 FLUTTER_PLATFORM = $(FLUTTER_PLATFORM_$(ARCH))
+LINUX_PLATFORM_amd64 := x64
+LINUX_PLATFORM_arm64 := arm64
+LINUX_PLATFORM = $(LINUX_PLATFORM_$(ARCH))
 DIST_DIR ?= dist
 PLUGIN_DIR ?= remote_turner.koplugin
 
@@ -42,7 +45,7 @@ macos:
 linux:
 	mkdir -p $(DIST_DIR)
 	flutter build linux --release --build-name=$(VERSION) --build-number=$(BUILD_NUMBER)
-	bash scripts/build-deb.sh $(VERSION) $(ARCH)
+	bash scripts/build-deb.sh $(VERSION) $(ARCH) $(LINUX_PLATFORM)
 
 koplugin:
 	mkdir -p $(DIST_DIR)

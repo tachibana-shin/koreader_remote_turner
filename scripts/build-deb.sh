@@ -3,13 +3,15 @@ set -e
 
 VERSION="$1"
 ARCH="$2"
+PLATFORM="$3"
 if [ -z "$VERSION" ] || [ -z "$ARCH" ]; then
-  echo "Usage: $0 <version> <arch>"
+  echo "Usage: $0 <version> <arch> [platform]"
   exit 1
 fi
+PLATFORM="${PLATFORM:-$ARCH}"
 
 DIST_DIR="dist"
-BUILD_DIR="build/linux/${ARCH}/release/bundle"
+BUILD_DIR="build/linux/${PLATFORM}/release/bundle"
 DEB_DIR="build/deb/koreader-remote-turner_${VERSION}_${ARCH}"
 ICON_SRC="macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png"
 
