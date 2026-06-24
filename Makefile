@@ -29,7 +29,7 @@ windows:
 macos:
 	mkdir -p $(DIST_DIR)
 	flutter build macos --release --build-name=$(VERSION) --build-number=$(BUILD_NUMBER)
-	hdiutil create -srcFolder build/macos/Build/Products/Release/Runner.app \
+	hdiutil create -srcFolder build/macos/Build/Products/Release/koreader_remote_turner.app \
 		-format UDZO -volname "KOReader Remote Turner" \
 		$(DIST_DIR)/koreader-remote-$(VERSION)-macos.dmg
 

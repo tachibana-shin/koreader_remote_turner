@@ -6,10 +6,10 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.media.AudioManager
 import android.media.session.MediaSession
 import android.os.Build
 import android.os.IBinder
+import android.view.KeyEvent
 import androidx.core.app.NotificationCompat
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
@@ -85,20 +85,14 @@ class BackgroundService : Service() {
     private fun setupMediaSession() {
         mediaSession = MediaSession(this, "KOReaderRemote")
         mediaSession?.setCallback(object : MediaSession.Callback() {
-            override fun onSetVolumeTo(volume: Int, flags: Int) {
-                val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, flags)
-            }
-
-            override fun onAdjustVolume(direction: Int, flags: Int) {
-                when (direction) {
-                    AudioManager.ADJUST_RAISE -> {
-                        eventSink?.success("volume_up")
-                    }
-                    AudioManager.ADJUST_LOWER -> {
-                        eventSink?.success("volume_down")
+            override fun onVolumeKeyEvent(event: KeyEvent): Boolean {
+                if (event.action == KeyEvent.ACTION_DOWN) {
+                    when (event.keyCode) {
+                        KeyEvent.KEYCODE_VOLUME_UP -> eventSink?.success("volume_up")
+                        KeyEvent.KEYCODE_VOLUME_DOWN -> eventSink?.success("volume_down")
                     }
                 }
+                return super.onVolumeKeyEvent(event)
             }
         })
         mediaSession?.setFlags(
