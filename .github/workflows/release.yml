@@ -54,7 +54,7 @@ jobs:
             arch: arm64
           - os: macos-latest
             target: macos
-            arch: universal
+            arch: arm64
           - os: macos-latest
             target: koplugin
             arch: noarch

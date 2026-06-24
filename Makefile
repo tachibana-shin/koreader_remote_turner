@@ -37,17 +37,10 @@ windows:
 
 macos:
 	mkdir -p $(DIST_DIR)
-	flutter build macos --release --build-name=$(VERSION) --build-number=$(BUILD_NUMBER) --config-only
-	xcodebuild -workspace macos/Runner.xcworkspace \
-		-scheme Runner \
-		-configuration Release \
-		-derivedDataPath build/macos \
-		ARCHS="x86_64 arm64" \
-		ONLY_ACTIVE_ARCH=NO \
-		BUILD_DIR=build/macos/Build/Products
+	flutter build macos --release --build-name=$(VERSION) --build-number=$(BUILD_NUMBER)
 	hdiutil create -srcFolder build/macos/Build/Products/Release/koreader_remote_turner.app \
 		-format UDZO -volname "KOReader Remote Turner" \
-		$(DIST_DIR)/koreader-remote-$(VERSION)-macos-universal.dmg
+		$(DIST_DIR)/koreader-remote-$(VERSION)-macos-$(ARCH).dmg
 
 linux:
 	mkdir -p $(DIST_DIR)
