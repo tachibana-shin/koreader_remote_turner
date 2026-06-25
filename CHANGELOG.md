@@ -1,3 +1,10 @@
+## [1.6.4](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.3...v1.6.4) (2026-06-25)
+
+
+### Bug Fixes
+
+* simplify event dispatching in Android and standardize WebSocket server lifecycle management ([138f4d3](https://github.com/tachibana-shin/koreader_remote_turner/commit/138f4d3f430784d9ebe93796bb8342c063992c9f))
+
 ## [1.6.3](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.2...v1.6.3) (2026-06-25)
 
 
