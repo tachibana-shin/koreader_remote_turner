@@ -1,5 +1,7 @@
 package git.shin.koreader_remote_turner
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -124,7 +126,8 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun isAccessibilityServiceEnabled(): Boolean {
-        val service = "${packageName}/.VolumeKeyService"
+        val componentName = ComponentName(this, VolumeKeyService::class.java)
+        val service = componentName.flattenToString()
         val enabledServices = android.provider.Settings.Secure.getString(
             contentResolver,
             android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
