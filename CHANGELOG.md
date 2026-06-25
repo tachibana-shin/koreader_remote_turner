@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.0...v1.6.1) (2026-06-25)
+
+
+### Bug Fixes
+
+* android f ([e91a966](https://github.com/tachibana-shin/koreader_remote_turner/commit/e91a9662a649d47a4a1789b450a8211b057bc522))
+
 # [1.6.0](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.5.3...v1.6.0) (2026-06-25)
 
 
