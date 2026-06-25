@@ -60,6 +60,20 @@ class App extends KaeruWidget<App> {
         if (action != null) keyboardService.actionRef.value = action;
       });
 
+      AppLifecycleListener(
+        onResume: () {
+          if (keyboardService.config.onlyWhileOpen) {
+            keyboardService.startListening();
+          }
+          focusNode.requestFocus();
+        },
+        onPause: () {
+          if (keyboardService.config.onlyWhileOpen) {
+            keyboardService.stopListening();
+          }
+        },
+      );
+
       await settingsService.getAutoStart().then((auto) {
         if (auto) wsServer.start();
       });
@@ -164,7 +178,6 @@ class App extends KaeruWidget<App> {
                     selectedIndex: currentTab.value,
                     onDestinationSelected: (i) {
                       currentTab.value = i;
-                      keyboardService.startListening();
                       focusNode.requestFocus();
                     },
                     labelType: NavigationRailLabelType.all,
@@ -210,7 +223,6 @@ class App extends KaeruWidget<App> {
                   selectedIndex: currentTab.value,
                   onDestinationSelected: (i) {
                     currentTab.value = i;
-                    keyboardService.startListening();
                     focusNode.requestFocus();
                   },
                   destinations: destinations,
