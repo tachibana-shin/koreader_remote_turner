@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kaeru/kaeru.dart';
@@ -14,6 +16,16 @@ import 'services/settings_service.dart';
 import 'services/password_auth.dart';
 import 'services/websocket_server.dart';
 
+ServerState _serverState = ServerState();
+KeyboardListenerService _keyboardService = KeyboardListenerService();
+PasswordAuth _passwordAuth = PasswordAuth();
+SettingsService _settingsService = SettingsService();
+WebSocketServer _wsServer = WebSocketServer(
+  state: _serverState,
+  auth: _passwordAuth,
+);
+bool _appInitialized = false;
+
 class App extends KaeruWidget<App> {
   final ValueChanged<ThemeMode> onThemeChanged;
 
@@ -23,11 +35,11 @@ class App extends KaeruWidget<App> {
   Setup setup() {
     final ctx = useContext();
     final currentTab = ref(0);
-    final serverState = ServerState();
-    final keyboardService = KeyboardListenerService();
-    final passwordAuth = PasswordAuth();
-    final settingsService = SettingsService();
-    final wsServer = WebSocketServer(state: serverState, auth: passwordAuth);
+    final serverState = _serverState;
+    final keyboardService = _keyboardService;
+    final passwordAuth = _passwordAuth;
+    final settingsService = _settingsService;
+    final wsServer = _wsServer;
     final focusNode = useFocusNode();
 
     useListen(keyboardService.actionRef, () {
@@ -45,14 +57,20 @@ class App extends KaeruWidget<App> {
       }
     });
 
-    onMounted(() async {
-      await keyboardService.loadConfig();
-      keyboardService.startListening();
-      await passwordAuth.load();
-      await serverState.logger.init();
-      serverState.replayLogs();
+    StreamSubscription? volumeSub;
+    AppLifecycleListener? lifecycleListener;
 
-      PlatformService.volumeEvents.listen((event) {
+    onMounted(() async {
+      if (!_appInitialized) {
+        _appInitialized = true;
+        await keyboardService.loadConfig();
+        await passwordAuth.load();
+        await serverState.logger.init();
+        serverState.replayLogs();
+      }
+      keyboardService.startListening();
+
+      volumeSub = PlatformService.volumeEvents.listen((event) {
         final key = event == 'volume_up'
             ? LogicalKeyboardKey.audioVolumeUp
             : LogicalKeyboardKey.audioVolumeDown;
@@ -60,7 +78,7 @@ class App extends KaeruWidget<App> {
         if (action != null) keyboardService.actionRef.value = action;
       });
 
-      AppLifecycleListener(
+      lifecycleListener = AppLifecycleListener(
         onResume: () {
           if (keyboardService.config.onlyWhileOpen) {
             keyboardService.startListening();
@@ -79,7 +97,10 @@ class App extends KaeruWidget<App> {
       });
     });
 
-    onBeforeUnmount(wsServer.dispose);
+    onBeforeUnmount(() {
+      volumeSub?.cancel();
+      lifecycleListener?.dispose();
+    });
 
     Widget pageBody(int tab) {
       final pages = <Widget>[
