@@ -3,22 +3,23 @@ package git.shin.koreader_remote_turner
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
+import android.view.KeyEvent
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     companion object {
         private const val NOTIFICATION_PERMISSION_REQUEST = 1001
-        private var eventChannelInitialized = false
     }
 
     private val CHANNEL = "git.shin.koreader_remote_turner/service"
-    private val EVENT_CHANNEL = "git.shin.koreader_remote_turner/events"
     private var pendingPermissionResult: MethodChannel.Result? = null
+    private var accessibilityEnabled = false
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -32,7 +33,9 @@ class MainActivity : FlutterActivity() {
                     result.success(true)
                 }
                 "isAccessibilityServiceEnabled" -> {
-                    result.success(isAccessibilityServiceEnabled())
+                    val enabled = isAccessibilityServiceEnabled()
+                    accessibilityEnabled = enabled
+                    result.success(enabled)
                 }
                 "requestNotificationPermission" -> {
                     if (Build.VERSION.SDK_INT >= 33) {
@@ -67,24 +70,41 @@ class MainActivity : FlutterActivity() {
                     stopService(intent)
                     result.success(true)
                 }
+                "isOverlayPermissionGranted" -> {
+                    result.success(Settings.canDrawOverlays(this))
+                }
+                "openOverlaySettings" -> {
+                    val intent = Intent(
+                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:$packageName"),
+                    )
+                    startActivity(intent)
+                    result.success(true)
+                }
                 else -> result.notImplemented()
             }
         }
+        accessibilityEnabled = isAccessibilityServiceEnabled()
+    }
 
-        if (!eventChannelInitialized) {
-            EventChannel(flutterEngine.dartExecutor.binaryMessenger, EVENT_CHANNEL).apply {
-                setStreamHandler(object : EventChannel.StreamHandler {
-                    override fun onListen(arguments: Any?, events: EventChannel.EventSink) {
-                        EventBus.eventSink = events
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action == KeyEvent.ACTION_DOWN) {
+            when (event.keyCode) {
+                KeyEvent.KEYCODE_VOLUME_UP -> {
+                    if (!accessibilityEnabled) {
+                        EventBus.sendEvent("volume_up")
                     }
-
-                    override fun onCancel(arguments: Any?) {
-                        EventBus.eventSink = null
+                    return true
+                }
+                KeyEvent.KEYCODE_VOLUME_DOWN -> {
+                    if (!accessibilityEnabled) {
+                        EventBus.sendEvent("volume_down")
                     }
-                })
+                    return true
+                }
             }
-            eventChannelInitialized = true
         }
+        return super.dispatchKeyEvent(event)
     }
 
     override fun onRequestPermissionsResult(
@@ -108,6 +128,9 @@ class MainActivity : FlutterActivity() {
             contentResolver,
             android.provider.Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
         ) ?: return false
-        return enabledServices.split(':').any { it.equals(service, ignoreCase = true) }
+        val enabled = enabledServices.split(':').any { it.equals(service, ignoreCase = true) }
+        accessibilityEnabled = enabled
+        return enabled
     }
 }
+

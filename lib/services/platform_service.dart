@@ -67,4 +67,23 @@ class PlatformService {
       await _methodChannel.invokeMethod('stopForegroundService');
     } catch (_) {}
   }
+
+  static Future<bool> isOverlayPermissionGranted() async {
+    if (!Platform.isAndroid) return true;
+    try {
+      final result = await _methodChannel.invokeMethod<bool>(
+        'isOverlayPermissionGranted',
+      );
+      return result ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<void> openOverlaySettings() async {
+    if (!Platform.isAndroid) return;
+    try {
+      await _methodChannel.invokeMethod('openOverlaySettings');
+    } catch (_) {}
+  }
 }
