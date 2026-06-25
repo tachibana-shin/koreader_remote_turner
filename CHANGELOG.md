@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.5.3...v1.6.0) (2026-06-25)
+
+
+### Features
+
+* add foreground service support for Android background execution ([b3d8eea](https://github.com/tachibana-shin/koreader_remote_turner/commit/b3d8eea93f1a67d79bcba45ea6bc0af7896b3a0c))
+
 ## [1.5.3](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.5.2...v1.5.3) (2026-06-25)
 
 
