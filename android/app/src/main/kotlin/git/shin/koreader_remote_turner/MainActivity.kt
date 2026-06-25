@@ -15,12 +15,6 @@ class MainActivity : FlutterActivity() {
     companion object {
         private const val NOTIFICATION_PERMISSION_REQUEST = 1001
         private var eventChannelInitialized = false
-        var methodChannel: MethodChannel? = null
-            get() = EventBus.methodChannel
-            set(value) { EventBus.methodChannel = value }
-        var eventSink: EventChannel.EventSink? = null
-            get() = EventBus.eventSink
-            set(value) { EventBus.eventSink = value }
     }
 
     private val CHANNEL = "git.shin.koreader_remote_turner/service"
@@ -31,7 +25,6 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
 
         val mc = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
-        methodChannel = mc
         EventBus.methodChannel = mc
 
         mc.setMethodCallHandler { call, result ->
@@ -70,12 +63,10 @@ class MainActivity : FlutterActivity() {
             EventChannel(flutterEngine.dartExecutor.binaryMessenger, EVENT_CHANNEL).apply {
                 setStreamHandler(object : EventChannel.StreamHandler {
                     override fun onListen(arguments: Any?, events: EventChannel.EventSink) {
-                        eventSink = events
                         EventBus.eventSink = events
                     }
 
                     override fun onCancel(arguments: Any?) {
-                        eventSink = null
                         EventBus.eventSink = null
                     }
                 })
