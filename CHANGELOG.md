@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.2...v1.6.3) (2026-06-25)
+
+
+### Bug Fixes
+
+* add retry logic with fallback to shared binding for websocket server startup ([df502b6](https://github.com/tachibana-shin/koreader_remote_turner/commit/df502b61010376875c40d6f4392a149daf15bfed))
+
 ## [1.6.2](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.1...v1.6.2) (2026-06-25)
 
 
