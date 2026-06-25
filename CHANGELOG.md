@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.5.2...v1.5.3) (2026-06-25)
+
+
+### Bug Fixes
+
+* remove native volume key dispatching and handle volume stream subscription within the app lifecycle ([9148b2c](https://github.com/tachibana-shin/koreader_remote_turner/commit/9148b2c949180542c882bc0efafab330e6d3f18e))
+
 ## [1.5.2](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.5.1...v1.5.2) (2026-06-25)
 
 
