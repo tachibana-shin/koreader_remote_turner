@@ -121,6 +121,12 @@ function RemoteTurner:init()
     self.ui.menu:registerToMainMenu(self)
 end
 
+function RemoteTurner:onSuspend()
+    if self.ws_client and self.ws_client:is_connected() then
+        self:disconnect()
+    end
+end
+
 function RemoteTurner:addToMainMenu(menu_items)
     menu_items.remote_turner = {
         text = _("Remote Turner"),
