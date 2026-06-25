@@ -76,19 +76,20 @@ class App extends KaeruWidget<App> {
     AppLifecycleListener? lifecycleListener;
 
     onMounted(() async {
-      if (!_appInitialized) {
-        _appInitialized = true;
-        await keyboardService.loadConfig();
-        await passwordAuth.load();
-        await serverState.logger.init();
-        serverState.replayLogs();
-        if (!_actionInit) {
-          _actionInit = true;
-          keyboardService.actionRef.addListener(
-            () => _onAction(keyboardService, wsServer),
-          );
-        }
+      if (_appInitialized) return;
+
+      _appInitialized = true;
+      await keyboardService.loadConfig();
+      await passwordAuth.load();
+      await serverState.logger.init();
+      serverState.replayLogs();
+      if (!_actionInit) {
+        _actionInit = true;
+        keyboardService.actionRef.addListener(
+          () => _onAction(keyboardService, wsServer),
+        );
       }
+
       keyboardService.startListening();
 
       _volumeSub?.cancel();
