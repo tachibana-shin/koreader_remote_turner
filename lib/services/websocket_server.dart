@@ -4,7 +4,6 @@ import 'dart:io';
 import '../models/server_state.dart';
 import 'event_logger.dart';
 import 'password_auth.dart';
-import 'platform_service.dart';
 
 class WebSocketServer {
   final ServerState state;
@@ -81,7 +80,11 @@ class WebSocketServer {
     if (_running) return;
     try {
       final port = int.tryParse(state.serverPort.value) ?? 9090;
-      _server = await HttpServer.bind(InternetAddress.anyIPv4, port);
+      _server = await HttpServer.bind(
+        InternetAddress.anyIPv4,
+        port,
+        shared: true,
+      );
       _running = true;
       state.serverRunning.value = true;
       state.connectionState.value = ServerConnectionState.waiting;
@@ -90,10 +93,6 @@ class WebSocketServer {
       _server!.listen(_handleRequest, onError: _handleError);
       _startUdpDiscovery(port);
       _resetIdleTimer();
-      final granted = await PlatformService.requestNotificationPermission();
-      if (granted) {
-        await PlatformService.startForegroundService();
-      }
     } catch (e) {
       state.logger.log(
         LogEntry(
@@ -119,7 +118,6 @@ class WebSocketServer {
     _server = null;
     state.serverRunning.value = false;
     state.connectionState.value = ServerConnectionState.off;
-    await PlatformService.stopForegroundService();
   }
 
   void _resetIdleTimer() {

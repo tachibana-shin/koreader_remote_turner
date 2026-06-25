@@ -1,7 +1,6 @@
 package git.shin.koreader_remote_turner
 
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -16,37 +15,27 @@ class MainActivity : FlutterActivity() {
     companion object {
         private const val NOTIFICATION_PERMISSION_REQUEST = 1001
         private var eventChannelInitialized = false
+        var methodChannel: MethodChannel? = null
+            get() = EventBus.methodChannel
+            set(value) { EventBus.methodChannel = value }
+        var eventSink: EventChannel.EventSink? = null
+            get() = EventBus.eventSink
+            set(value) { EventBus.eventSink = value }
     }
 
     private val CHANNEL = "git.shin.koreader_remote_turner/service"
     private val EVENT_CHANNEL = "git.shin.koreader_remote_turner/events"
-    private var eventSink: EventChannel.EventSink? = null
     private var pendingPermissionResult: MethodChannel.Result? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        val methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
-        BackgroundService.methodChannel = methodChannel
+        val mc = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
+        methodChannel = mc
+        EventBus.methodChannel = mc
 
-        methodChannel.setMethodCallHandler { call, result ->
+        mc.setMethodCallHandler { call, result ->
             when (call.method) {
-                "startService" -> {
-                    val intent = Intent(this, BackgroundService::class.java)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        startForegroundService(intent)
-                    } else {
-                        startService(intent)
-                    }
-                    BackgroundService.eventSink = eventSink
-                    result.success(true)
-                }
-                "stopService" -> {
-                    val intent = Intent(this, BackgroundService::class.java)
-                    stopService(intent)
-                    BackgroundService.eventSink = null
-                    result.success(true)
-                }
                 "openAccessibilitySettings" -> {
                     startActivity(Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS))
                     result.success(true)
@@ -82,12 +71,12 @@ class MainActivity : FlutterActivity() {
                 setStreamHandler(object : EventChannel.StreamHandler {
                     override fun onListen(arguments: Any?, events: EventChannel.EventSink) {
                         eventSink = events
-                        BackgroundService.eventSink = events
+                        EventBus.eventSink = events
                     }
 
                     override fun onCancel(arguments: Any?) {
                         eventSink = null
-                        BackgroundService.eventSink = null
+                        EventBus.eventSink = null
                     }
                 })
             }
@@ -99,11 +88,11 @@ class MainActivity : FlutterActivity() {
         if (event?.action == KeyEvent.ACTION_DOWN) {
             when (event.keyCode) {
                 KeyEvent.KEYCODE_VOLUME_UP -> {
-                    BackgroundService.sendEvent("volume_up")
+                    EventBus.sendEvent("volume_up")
                     return true
                 }
                 KeyEvent.KEYCODE_VOLUME_DOWN -> {
-                    BackgroundService.sendEvent("volume_down")
+                    EventBus.sendEvent("volume_down")
                     return true
                 }
             }

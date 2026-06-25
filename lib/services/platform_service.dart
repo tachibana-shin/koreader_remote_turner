@@ -40,20 +40,6 @@ class PlatformService {
     }
   }
 
-  static Future<void> startForegroundService() async {
-    if (!Platform.isAndroid) return;
-    try {
-      await _methodChannel.invokeMethod('startService');
-    } catch (_) {}
-  }
-
-  static Future<void> stopForegroundService() async {
-    if (!Platform.isAndroid) return;
-    try {
-      await _methodChannel.invokeMethod('stopService');
-    } catch (_) {}
-  }
-
   static Future<bool> isAccessibilityServiceEnabled() async {
     if (!Platform.isAndroid) return false;
     try {
