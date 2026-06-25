@@ -4,7 +4,7 @@ import io.flutter.app.FlutterApplication
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
-import io.flutter.embedding.engine.plugins.util.GeneratedPluginRegistrant
+import io.flutter.plugins.GeneratedPluginRegistrant
 
 class RemoteTurnerApplication : FlutterApplication() {
     override fun onCreate() {
