@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.4.0...v1.5.0) (2026-06-25)
+
+
+### Features
+
+* configure accessibility service for volume key hardware events and update service manifest ([c84972e](https://github.com/tachibana-shin/koreader_remote_turner/commit/c84972eb6674975c037db692aede791dd81296fd))
+
 # [1.4.0](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.3.0...v1.4.0) (2026-06-25)
 
 
