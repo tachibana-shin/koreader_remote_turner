@@ -1,3 +1,10 @@
+## [1.6.6](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.5...v1.6.6) (2026-06-25)
+
+
+### Bug Fixes
+
+* implement background foreground service for volume key handling and refine WebSocket communication logic ([db6d893](https://github.com/tachibana-shin/koreader_remote_turner/commit/db6d893551352e8136f7d5c79ff52afc5a3dd806))
+
 ## [1.6.5](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.4...v1.6.5) (2026-06-25)
 
 
