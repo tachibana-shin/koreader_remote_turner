@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.1...v1.6.2) (2026-06-25)
+
+
+### Bug Fixes
+
+* **android:** prevent device sleep for service ([1e1d5c7](https://github.com/tachibana-shin/koreader_remote_turner/commit/1e1d5c785d77bacac7dc10f97f7916ae9a12a54b))
+
 ## [1.6.1](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.0...v1.6.1) (2026-06-25)
 
 
