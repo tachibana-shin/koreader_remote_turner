@@ -15,14 +15,7 @@ object EventBus {
     private val eventQueue = mutableListOf<String>()
 
     fun sendEvent(event: String) {
-        if (eventSink != null) {
-            eventSink?.success(event)
-        } else {
-            synchronized(eventQueue) {
-                eventQueue.add(event)
-            }
-            methodChannel?.invokeMethod("volumeKeyPressed", event)
-        }
+        methodChannel?.invokeMethod("volumeKeyPressed", event)
     }
 
     private fun flushEventQueue() {
