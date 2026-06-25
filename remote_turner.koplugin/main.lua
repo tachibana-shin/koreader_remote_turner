@@ -204,6 +204,7 @@ function RemoteTurner:disconnect()
     self._poll_cb = nil
     if self.ws_client then
         self.ws_client:disconnect()
+        self.ws_client = nil
     end
 end
 
@@ -386,8 +387,6 @@ function RemoteTurner:startMessageLoop()
             local _, msg = self.ws_client.socket:recv()
             if not msg then
                 self:disconnect()
-                self._poll_cb = nil
-                self.ws_client = nil
                 return
             end
             self:_handleMessage(msg)
@@ -408,8 +407,6 @@ function RemoteTurner:startMessageLoop()
                 if not msg then
                     self:disconnect()
                     UIManager:unregisterCheckCallback(self._check_cb)
-                    self._check_cb = nil
-                    self.ws_client = nil
                     return
                 end
                 self:_handleMessage(msg)
