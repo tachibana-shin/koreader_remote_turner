@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'app.dart';
 import 'l10n/app_localizations.dart';
+import 'services/platform_service.dart';
 import 'services/settings_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  PlatformService.init();
   runApp(const _AppWrapper());
 }
 

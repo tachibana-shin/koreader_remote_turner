@@ -10,6 +10,24 @@ class PlatformService {
     'git.shin.koreader_remote_turner/events',
   );
 
+  static final StreamController<String> _volumeEventController =
+      StreamController<String>.broadcast();
+
+  static Stream<String> get volumeEvents => _volumeEventController.stream;
+
+  static void init() {
+    if (!Platform.isAndroid) return;
+    _eventChannel.receiveBroadcastStream().map((e) => e.toString()).listen(
+      _volumeEventController.add,
+      onError: (_) {},
+    );
+    _methodChannel.setMethodCallHandler((call) async {
+      if (call.method == 'volumeKeyPressed') {
+        _volumeEventController.add(call.arguments as String);
+      }
+    });
+  }
+
   static Future<bool> requestNotificationPermission() async {
     if (!Platform.isAndroid) return true;
     try {
@@ -53,17 +71,5 @@ class PlatformService {
     try {
       await _methodChannel.invokeMethod('openAccessibilitySettings');
     } catch (_) {}
-  }
-
-  static Stream<String> get volumeEvents {
-    if (!Platform.isAndroid) {
-      return const Stream.empty();
-    }
-    return _eventChannel
-        .receiveBroadcastStream()
-        .map((event) {
-          return event.toString();
-        })
-        .handleError((_) {});
   }
 }

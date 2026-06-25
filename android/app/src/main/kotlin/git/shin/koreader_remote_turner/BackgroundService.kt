@@ -36,6 +36,7 @@ class BackgroundService : Service() {
                     eventQueue.add(event)
                 }
             }
+            methodChannel?.invokeMethod("volumeKeyPressed", event)?.exceptionally { null }
         }
 
         private fun flushEventQueue() {

@@ -13,6 +13,7 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     companion object {
         private const val NOTIFICATION_PERMISSION_REQUEST = 1001
+        private var eventChannelInitialized = false
     }
 
     private val CHANNEL = "git.shin.koreader_remote_turner/service"
@@ -74,18 +75,21 @@ class MainActivity : FlutterActivity() {
             }
         }
 
-        EventChannel(flutterEngine.dartExecutor.binaryMessenger, EVENT_CHANNEL).apply {
-            setStreamHandler(object : EventChannel.StreamHandler {
-                override fun onListen(arguments: Any?, events: EventChannel.EventSink) {
-                    eventSink = events
-                    BackgroundService.eventSink = events
-                }
+        if (!eventChannelInitialized) {
+            EventChannel(flutterEngine.dartExecutor.binaryMessenger, EVENT_CHANNEL).apply {
+                setStreamHandler(object : EventChannel.StreamHandler {
+                    override fun onListen(arguments: Any?, events: EventChannel.EventSink) {
+                        eventSink = events
+                        BackgroundService.eventSink = events
+                    }
 
-                override fun onCancel(arguments: Any?) {
-                    eventSink = null
-                    BackgroundService.eventSink = null
-                }
-            })
+                    override fun onCancel(arguments: Any?) {
+                        eventSink = null
+                        BackgroundService.eventSink = null
+                    }
+                })
+            }
+            eventChannelInitialized = true
         }
     }
 

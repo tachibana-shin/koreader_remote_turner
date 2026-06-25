@@ -47,6 +47,7 @@ class App extends KaeruWidget<App> {
 
     onMounted(() async {
       await keyboardService.loadConfig();
+      keyboardService.startListening();
       await passwordAuth.load();
       await serverState.logger.init();
       serverState.replayLogs();
