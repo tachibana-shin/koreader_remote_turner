@@ -83,7 +83,6 @@ class WebSocketServer {
       _server = await HttpServer.bind(
         InternetAddress.anyIPv4,
         port,
-        shared: true,
       );
       _running = true;
       state.serverRunning.value = true;
