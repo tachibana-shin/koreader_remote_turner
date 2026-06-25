@@ -17,10 +17,10 @@ class PlatformService {
 
   static void init() {
     if (!Platform.isAndroid) return;
-    _eventChannel.receiveBroadcastStream().map((e) => e.toString()).listen(
-      _volumeEventController.add,
-      onError: (_) {},
-    );
+    _eventChannel
+        .receiveBroadcastStream()
+        .map((e) => e.toString())
+        .listen(_volumeEventController.add, onError: (_) {});
     _methodChannel.setMethodCallHandler((call) async {
       if (call.method == 'volumeKeyPressed') {
         _volumeEventController.add(call.arguments as String);
