@@ -1,3 +1,10 @@
+## [1.6.5](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.4...v1.6.5) (2026-06-25)
+
+
+### Bug Fixes
+
+* migrate volume event handling from MethodChannel to EventChannel and clean up server configuration ([eb193a5](https://github.com/tachibana-shin/koreader_remote_turner/commit/eb193a5ed0bd3fb5ae8b956bbb6ea2f41749061c))
+
 ## [1.6.4](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.3...v1.6.4) (2026-06-25)
 
 
