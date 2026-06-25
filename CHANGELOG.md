@@ -1,3 +1,10 @@
+## [1.6.8](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.7...v1.6.8) (2026-06-25)
+
+
+### Bug Fixes
+
+* optimize app lifecycle initialization in app.dart and add session metadata file ([37e5ab8](https://github.com/tachibana-shin/koreader_remote_turner/commit/37e5ab887ebaca3be69425085805c7a493a063b8))
+
 ## [1.6.7](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.6...v1.6.7) (2026-06-25)
 
 
