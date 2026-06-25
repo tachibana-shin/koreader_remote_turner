@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.5.0...v1.5.1) (2026-06-25)
+
+
+### Bug Fixes
+
+* sync state kt-dart ([e1da448](https://github.com/tachibana-shin/koreader_remote_turner/commit/e1da448250bfbb184fe62e6564cd82c6867c50da))
+
 # [1.5.0](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.4.0...v1.5.0) (2026-06-25)
 
 
