@@ -21,11 +21,6 @@ class PlatformService {
         .receiveBroadcastStream()
         .map((e) => e.toString())
         .listen(_volumeEventController.add, onError: (_) {});
-    _methodChannel.setMethodCallHandler((call) async {
-      if (call.method == 'volumeKeyPressed') {
-        _volumeEventController.add(call.arguments as String);
-      }
-    });
   }
 
   static Future<bool> requestNotificationPermission() async {

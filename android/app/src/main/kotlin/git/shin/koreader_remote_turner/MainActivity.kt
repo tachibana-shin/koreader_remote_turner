@@ -24,7 +24,6 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
 
         val mc = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
-        EventBus.methodChannel = mc
 
         mc.setMethodCallHandler { call, result ->
             when (call.method) {

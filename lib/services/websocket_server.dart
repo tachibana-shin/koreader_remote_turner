@@ -89,10 +89,7 @@ class WebSocketServer {
     );
     try {
       final port = int.tryParse(state.serverPort.value) ?? 9090;
-      _server = await HttpServer.bind(
-        InternetAddress.anyIPv4,
-        port,
-      );
+      _server = await HttpServer.bind(InternetAddress.anyIPv4, port);
       _running = true;
       state.serverRunning.value = true;
       state.connectionState.value = ServerConnectionState.waiting;

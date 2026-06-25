@@ -1,10 +1,8 @@
 package git.shin.koreader_remote_turner
 
 import io.flutter.plugin.common.EventChannel
-import io.flutter.plugin.common.MethodChannel
 
 object EventBus {
-    var methodChannel: MethodChannel? = null
     var eventSink: EventChannel.EventSink? = null
         set(value) {
             field = value
@@ -15,7 +13,13 @@ object EventBus {
     private val eventQueue = mutableListOf<String>()
 
     fun sendEvent(event: String) {
-        methodChannel?.invokeMethod("volumeKeyPressed", event)
+        if (eventSink != null) {
+            eventSink?.success(event)
+        } else {
+            synchronized(eventQueue) {
+                eventQueue.add(event)
+            }
+        }
     }
 
     private fun flushEventQueue() {
