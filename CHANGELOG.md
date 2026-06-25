@@ -1,3 +1,10 @@
+## [1.6.7](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.6...v1.6.7) (2026-06-25)
+
+
+### Bug Fixes
+
+* prevent websocket server restart if already running and log session metadata ([bfe0363](https://github.com/tachibana-shin/koreader_remote_turner/commit/bfe0363123378cdfb235811f18f72e0ee385f177))
+
 ## [1.6.6](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.6.5...v1.6.6) (2026-06-25)
 
 
