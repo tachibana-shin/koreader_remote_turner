@@ -1,3 +1,17 @@
+# [1.4.0](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.3.0...v1.4.0) (2026-06-25)
+
+
+### Bug Fixes
+
+* nullify ws_client upon disconnection and remove redundant nil assignments in poll callbacks ([eb00764](https://github.com/tachibana-shin/koreader_remote_turner/commit/eb00764690b029f548b7fe0b8815ae90b687a495))
+* **remote-turner:** improve websocket disconnect handling ([8d188b5](https://github.com/tachibana-shin/koreader_remote_turner/commit/8d188b5db06bec34e367d06f3bb9b1a90ef88524))
+* update BackgroundService and RemoteTurnerApplication to support volume key event handling ([370acd8](https://github.com/tachibana-shin/koreader_remote_turner/commit/370acd86654a95be0c63dde3ce67e2c13e039d9e))
+
+
+### Features
+
+* implement lifecycle listener for automatic keyboard service toggling and remove redundant startup calls ([e3d3f3f](https://github.com/tachibana-shin/koreader_remote_turner/commit/e3d3f3f466868ab0703851c5fb42d521de3b235b))
+
 # [1.3.0](https://github.com/tachibana-shin/koreader_remote_turner/compare/v1.2.0...v1.3.0) (2026-06-24)
 
 
