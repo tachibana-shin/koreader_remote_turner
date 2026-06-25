@@ -25,6 +25,7 @@ WebSocketServer _wsServer = WebSocketServer(
   auth: _passwordAuth,
 );
 bool _appInitialized = false;
+StreamSubscription? _volumeSub;
 
 class App extends KaeruWidget<App> {
   final ValueChanged<ThemeMode> onThemeChanged;
@@ -57,7 +58,6 @@ class App extends KaeruWidget<App> {
       }
     });
 
-    StreamSubscription? volumeSub;
     AppLifecycleListener? lifecycleListener;
 
     onMounted(() async {
@@ -70,7 +70,8 @@ class App extends KaeruWidget<App> {
       }
       keyboardService.startListening();
 
-      volumeSub = PlatformService.volumeEvents.listen((event) {
+      _volumeSub?.cancel();
+      _volumeSub = PlatformService.volumeEvents.listen((event) {
         final key = event == 'volume_up'
             ? LogicalKeyboardKey.audioVolumeUp
             : LogicalKeyboardKey.audioVolumeDown;
@@ -98,7 +99,6 @@ class App extends KaeruWidget<App> {
     });
 
     onBeforeUnmount(() {
-      volumeSub?.cancel();
       lifecycleListener?.dispose();
     });
 

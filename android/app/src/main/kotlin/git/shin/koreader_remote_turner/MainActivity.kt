@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.view.KeyEvent
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -73,22 +72,6 @@ class MainActivity : FlutterActivity() {
             }
             eventChannelInitialized = true
         }
-    }
-
-    override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
-        if (event?.action == KeyEvent.ACTION_DOWN) {
-            when (event.keyCode) {
-                KeyEvent.KEYCODE_VOLUME_UP -> {
-                    EventBus.sendEvent("volume_up")
-                    return true
-                }
-                KeyEvent.KEYCODE_VOLUME_DOWN -> {
-                    EventBus.sendEvent("volume_down")
-                    return true
-                }
-            }
-        }
-        return super.dispatchKeyEvent(event)
     }
 
     override fun onRequestPermissionsResult(

@@ -159,7 +159,6 @@ class KeyboardListenerService {
   }
 
   KeyAction? actionForKey(LogicalKeyboardKey key) {
-    if (!_listening) return null;
     if (_config.forwardKeys.contains(key)) return KeyAction.forward;
     if (_config.backwardKeys.contains(key)) return KeyAction.backward;
     if (_config.sleepKeys.contains(key)) return KeyAction.sleep;
