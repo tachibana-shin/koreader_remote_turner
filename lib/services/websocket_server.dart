@@ -77,14 +77,29 @@ class WebSocketServer {
   }
 
   Future<void> start() async {
-    if (_running) return;
+    if (_running) {
+      state.logger.log(
+        LogEntry(
+          time: DateTime.now(),
+          event: 'server_start',
+          status: 'info',
+          detail: 'Server already running, skipping',
+        ),
+      );
+      return;
+    }
+    _running = true;
+    state.logger.log(
+      LogEntry(
+        time: DateTime.now(),
+        event: 'server_start',
+        status: 'info',
+        detail: 'Starting server...',
+      ),
+    );
     try {
       final port = int.tryParse(state.serverPort.value) ?? 9090;
-      _server = await HttpServer.bind(
-        InternetAddress.anyIPv4,
-        port,
-      );
-      _running = true;
+      _server = await _bindWithRetry(port, retries: 5, delayMs: 1000);
       state.serverRunning.value = true;
       state.connectionState.value = ServerConnectionState.waiting;
       state.serverAddress.value = await _getLanIp();
@@ -93,6 +108,7 @@ class WebSocketServer {
       _startUdpDiscovery(port);
       _resetIdleTimer();
     } catch (e) {
+      _running = false;
       state.logger.log(
         LogEntry(
           time: DateTime.now(),
@@ -102,6 +118,39 @@ class WebSocketServer {
         ),
       );
     }
+  }
+
+  Future<HttpServer> _bindWithRetry(
+    int port, {
+    required int retries,
+    required int delayMs,
+  }) async {
+    for (var i = 0; i < retries; i++) {
+      try {
+        return await HttpServer.bind(InternetAddress.anyIPv4, port);
+      } catch (e) {
+        if (i < retries - 1) {
+          state.logger.log(
+            LogEntry(
+              time: DateTime.now(),
+              event: 'server_retry',
+              status: 'warning',
+              detail: 'Port $port busy, retrying in ${delayMs}ms ($i)',
+            ),
+          );
+          await Future.delayed(Duration(milliseconds: delayMs));
+        }
+      }
+    }
+    state.logger.log(
+      LogEntry(
+        time: DateTime.now(),
+        event: 'server_fallback',
+        status: 'warning',
+        detail: 'Port $port still busy after $retries retries, binding shared',
+      ),
+    );
+    return await HttpServer.bind(InternetAddress.anyIPv4, port, shared: true);
   }
 
   Future<void> stop() async {
