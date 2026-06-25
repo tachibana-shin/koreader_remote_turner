@@ -384,6 +384,12 @@ function RemoteTurner:startMessageLoop()
         local can_read = socket.select({ raw_sock }, nil, 0)
         if can_read and #can_read > 0 then
             local _, msg = self.ws_client.socket:recv()
+            if not msg then
+                self:disconnect()
+                self._poll_cb = nil
+                self.ws_client = nil
+                return
+            end
             self:_handleMessage(msg)
         end
         self._poll_cb = UIManager:scheduleIn(0.1, poll)
@@ -399,6 +405,13 @@ function RemoteTurner:startMessageLoop()
             local can_read = socket.select({ raw_sock }, nil, 0)
             if can_read and #can_read > 0 then
                 local _, msg = self.ws_client.socket:recv()
+                if not msg then
+                    self:disconnect()
+                    UIManager:unregisterCheckCallback(self._check_cb)
+                    self._check_cb = nil
+                    self.ws_client = nil
+                    return
+                end
                 self:_handleMessage(msg)
             end
         end
