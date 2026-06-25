@@ -58,4 +58,18 @@ class PlatformService {
       await _methodChannel.invokeMethod('openAccessibilitySettings');
     } catch (_) {}
   }
+
+  static Future<void> startForegroundService() async {
+    if (!Platform.isAndroid) return;
+    try {
+      await _methodChannel.invokeMethod('startForegroundService');
+    } catch (_) {}
+  }
+
+  static Future<void> stopForegroundService() async {
+    if (!Platform.isAndroid) return;
+    try {
+      await _methodChannel.invokeMethod('stopForegroundService');
+    } catch (_) {}
+  }
 }

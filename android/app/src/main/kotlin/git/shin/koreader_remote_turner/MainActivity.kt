@@ -54,6 +54,20 @@ class MainActivity : FlutterActivity() {
                         result.success(true)
                     }
                 }
+                "startForegroundService" -> {
+                    val intent = Intent(this, BackgroundService::class.java)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(intent)
+                    } else {
+                        startService(intent)
+                    }
+                    result.success(true)
+                }
+                "stopForegroundService" -> {
+                    val intent = Intent(this, BackgroundService::class.java)
+                    stopService(intent)
+                    result.success(true)
+                }
                 else -> result.notImplemented()
             }
         }

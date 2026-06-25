@@ -21,8 +21,8 @@ object EventBus {
             synchronized(eventQueue) {
                 eventQueue.add(event)
             }
+            methodChannel?.invokeMethod("volumeKeyPressed", event)
         }
-        methodChannel?.invokeMethod("volumeKeyPressed", event)
     }
 
     private fun flushEventQueue() {

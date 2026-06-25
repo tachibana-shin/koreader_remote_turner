@@ -25,7 +25,22 @@ WebSocketServer _wsServer = WebSocketServer(
   auth: _passwordAuth,
 );
 bool _appInitialized = false;
+bool _actionInit = false;
 StreamSubscription? _volumeSub;
+
+void _onAction(KeyboardListenerService kb, WebSocketServer ws) {
+  if (kb.actionRef.value case final action?) {
+    kb.actionRef.value = null;
+    switch (action) {
+      case KeyAction.forward:
+        ws.sendAction('next_page');
+      case KeyAction.backward:
+        ws.sendAction('prev_page');
+      case KeyAction.sleep:
+        ws.sendAction('sleep');
+    }
+  }
+}
 
 class App extends KaeruWidget<App> {
   final ValueChanged<ThemeMode> onThemeChanged;
@@ -43,21 +58,6 @@ class App extends KaeruWidget<App> {
     final wsServer = _wsServer;
     final focusNode = useFocusNode();
 
-    useListen(keyboardService.actionRef, () {
-      final action = keyboardService.actionRef.value;
-      if (action != null) {
-        keyboardService.actionRef.value = null;
-        switch (action) {
-          case KeyAction.forward:
-            wsServer.sendAction('next_page');
-          case KeyAction.backward:
-            wsServer.sendAction('prev_page');
-          case KeyAction.sleep:
-            wsServer.sendAction('sleep');
-        }
-      }
-    });
-
     AppLifecycleListener? lifecycleListener;
 
     onMounted(() async {
@@ -67,6 +67,12 @@ class App extends KaeruWidget<App> {
         await passwordAuth.load();
         await serverState.logger.init();
         serverState.replayLogs();
+        if (!_actionInit) {
+          _actionInit = true;
+          keyboardService.actionRef.addListener(
+            () => _onAction(keyboardService, wsServer),
+          );
+        }
       }
       keyboardService.startListening();
 
@@ -96,6 +102,7 @@ class App extends KaeruWidget<App> {
       await settingsService.getAutoStart().then((auto) {
         if (auto) wsServer.start();
       });
+      PlatformService.startForegroundService();
     });
 
     onBeforeUnmount(() {
