@@ -58,6 +58,21 @@ class App extends KaeruWidget<App> {
     final wsServer = _wsServer;
     final focusNode = useFocusNode();
 
+    useListen(keyboardService.actionRef, () {
+      final action = keyboardService.actionRef.value;
+      if (action != null) {
+        keyboardService.actionRef.value = null;
+        switch (action) {
+          case KeyAction.forward:
+            wsServer.sendAction('next_page');
+          case KeyAction.backward:
+            wsServer.sendAction('prev_page');
+          case KeyAction.sleep:
+            wsServer.sendAction('sleep');
+        }
+      }
+    });
+
     AppLifecycleListener? lifecycleListener;
 
     onMounted(() async {
